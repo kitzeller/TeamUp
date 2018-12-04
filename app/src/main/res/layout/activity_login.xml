@@ -2,7 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
+    android:id="@+id/LOGIN_constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -16,7 +16,7 @@
     <!-- Login progress -->
 
     <Button
-        android:id="@+id/createAccountButton"
+        android:id="@+id/LOGIN_createAccountButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
@@ -27,7 +27,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/loginTextView"
+        android:id="@+id/LOGIN_loginTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
@@ -42,14 +42,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <AutoCompleteTextView
-        android:id="@+id/emailEditText"
+        android:id="@+id/LOGIN_emailEditText"
         android:layout_width="240dp"
         android:layout_height="73dp"
         android:layout_marginBottom="4dp"
         android:ems="10"
         android:hint="@string/prompt_email"
         android:inputType="textAutoComplete|textEmailAddress"
-        app:layout_constraintBottom_toTopOf="@+id/passwordEditText"
+        app:layout_constraintBottom_toTopOf="@+id/LOGIN_passwordEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -57,7 +57,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/passwordEditText"
+        android:id="@+id/LOGIN_passwordEditText"
         style="@style/Widget.AppCompat.AutoCompleteTextView"
         android:layout_width="237dp"
         android:layout_height="64dp"
@@ -66,7 +66,7 @@
         android:hint="@string/password"
         android:inputType="textPassword"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/loginButton"
+        app:layout_constraintBottom_toTopOf="@+id/LOGIN_loginButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -74,13 +74,13 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/orTextView"
+        android:id="@+id/LOGIN_orTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:text="@string/or"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/createAccountButton"
+        app:layout_constraintBottom_toTopOf="@+id/LOGIN_createAccountButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -88,20 +88,20 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/LOGIN_loginButton"
         style="@style/Widget.AppCompat.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="28dp"
         android:text="@string/login"
-        app:layout_constraintBottom_toTopOf="@+id/orTextView"
+        app:layout_constraintBottom_toTopOf="@+id/LOGIN_orTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/loginImageView"
+        android:id="@+id/LOGIN_loginImageView"
         android:layout_width="151dp"
         android:layout_height="155dp"
         android:contentDescription="@string/logo"

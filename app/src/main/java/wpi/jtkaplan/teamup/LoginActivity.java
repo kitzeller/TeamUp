@@ -76,12 +76,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
-        mEmailView = findViewById(R.id.emailEditText);
+        mEmailView = findViewById(R.id.LOGIN_emailEditText);
         populateAutoComplete();
 
         mAuth = FirebaseAuth.getInstance();
 
-        ImageView img_animation = findViewById(R.id.loginImageView);
+        ImageView img_animation = findViewById(R.id.LOGIN_loginImageView);
         Display display = getWindowManager().getDefaultDisplay();
         float width = display.getWidth();
         float height = display.getHeight();
@@ -91,14 +91,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         animation.setRepeatMode(1); // repeat animation (left to right, right to left )
         img_animation.startAnimation(animation); // start animation
 
-        TextView txt_login = findViewById(R.id.loginTextView);
+        TextView txt_login = findViewById(R.id.LOGIN_loginTextView);
         TranslateAnimation animationtxt = new TranslateAnimation(0, 0, height - 100, 0); // new TranslateAnimation(xFrom,xTo, yFrom,yTo)
         animationtxt.setDuration(2000); // animation duration
         animationtxt.setRepeatCount(0); // animation repeat count
         animationtxt.setRepeatMode(1); // repeat animation (left to right, right to left )
         txt_login.startAnimation(animationtxt); // start animation
 
-        mPasswordView = findViewById(R.id.passwordEditText);
+        mPasswordView = findViewById(R.id.LOGIN_passwordEditText);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button mEmailSignInButton = findViewById(R.id.loginButton);
+        Button mEmailSignInButton = findViewById(R.id.LOGIN_loginButton);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

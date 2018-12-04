@@ -59,8 +59,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="188dp"
-        android:orientation="vertical"></LinearLayout>
+        android:layout_height="239dp"
+        android:orientation="vertical">
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/sign_out"

@@ -17,14 +17,17 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -65,6 +68,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Set up the login form.
         mEmailView = findViewById(R.id.emailEditText);
         populateAutoComplete();
+
+        ImageView img_animation = (ImageView) findViewById(R.id.loginImageView);
+        Display display = getWindowManager().getDefaultDisplay();
+        float width = display.getWidth();
+        float height = display.getHeight();
+        TranslateAnimation animation = new TranslateAnimation(width-50, 0, 0, 0); // new TranslateAnimation(xFrom,xTo, yFrom,yTo)
+        animation.setDuration(2000); // animation duration
+        animation.setRepeatCount(0); // animation repeat count
+        animation.setRepeatMode(1); // repeat animation (left to right, right to left )
+        img_animation.startAnimation(animation); // start animation
+
+        TextView txt_login = (TextView) findViewById(R.id.loginTextView);
+        TranslateAnimation animationtxt = new TranslateAnimation(0, 0, height-100 , 0); // new TranslateAnimation(xFrom,xTo, yFrom,yTo)
+        animationtxt.setDuration(2000); // animation duration
+        animationtxt.setRepeatCount(0); // animation repeat count
+        animationtxt.setRepeatMode(1); // repeat animation (left to right, right to left )
+        txt_login.startAnimation(animationtxt); // start animation
 
         mPasswordView = findViewById(R.id.passwordEditText);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {

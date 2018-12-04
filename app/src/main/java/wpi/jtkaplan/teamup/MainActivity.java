@@ -1,10 +1,10 @@
 package wpi.jtkaplan.teamup;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.nav_home:
                             //selectedFragment = new HomeFragment();
                             // TODO: Add funtionality for different home screen depending on if Profesor or Student
+                            // todo: let's discuss the above point -- might not need to do this.
                             selectedFragment = new ClassFragment();
                             break;
                         case R.id.nav_favorites:

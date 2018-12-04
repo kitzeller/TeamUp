@@ -25,7 +25,7 @@ public class RecyclerViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
 
-        rv = (RecyclerView) view.findViewById(R.id.rv);
+        rv = view.findViewById(R.id.rv);
 
         LinearLayoutManager llm = new LinearLayoutManager(this.getActivity());
         rv.setLayoutManager(llm);
@@ -35,7 +35,6 @@ public class RecyclerViewFragment extends Fragment {
         initializeAdapter();
 
         return view;
-
     }
 
     private void initializeData() {
@@ -45,11 +44,11 @@ public class RecyclerViewFragment extends Fragment {
         classes.add(new Class("Intro to Computing", "CS 4518","Tian Guo"));
         classes.add(new Class("Fun and Games", "FUN 101","Mr Jake"));
         classes.add(new Class("Intro to Games", "IMGD 1001","Mr Baker"));
-
     }
 
     private void initializeAdapter() {
         RVAdapter adapter = new RVAdapter(classes);
+        adapter.getItemId(classes.size() - 1);
         rv.setAdapter(adapter);
     }
 }

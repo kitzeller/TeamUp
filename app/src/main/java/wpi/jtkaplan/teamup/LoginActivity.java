@@ -17,6 +17,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
@@ -29,6 +30,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,14 +61,28 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+    private static final String TAG = "LoginActivity";
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
 
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
+
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            updateUI();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,18 +92,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView = findViewById(R.id.emailEditText);
         populateAutoComplete();
 
+        mAuth = FirebaseAuth.getInstance();
+
         ImageView img_animation = (ImageView) findViewById(R.id.loginImageView);
         Display display = getWindowManager().getDefaultDisplay();
         float width = display.getWidth();
         float height = display.getHeight();
-        TranslateAnimation animation = new TranslateAnimation(width-50, 0, 0, 0); // new TranslateAnimation(xFrom,xTo, yFrom,yTo)
+        TranslateAnimation animation = new TranslateAnimation(width - 50, 0, 0, 0); // new TranslateAnimation(xFrom,xTo, yFrom,yTo)
         animation.setDuration(2000); // animation duration
         animation.setRepeatCount(0); // animation repeat count
         animation.setRepeatMode(1); // repeat animation (left to right, right to left )
         img_animation.startAnimation(animation); // start animation
 
         TextView txt_login = (TextView) findViewById(R.id.loginTextView);
-        TranslateAnimation animationtxt = new TranslateAnimation(0, 0, height-100 , 0); // new TranslateAnimation(xFrom,xTo, yFrom,yTo)
+        TranslateAnimation animationtxt = new TranslateAnimation(0, 0, height - 100, 0); // new TranslateAnimation(xFrom,xTo, yFrom,yTo)
         animationtxt.setDuration(2000); // animation duration
         animationtxt.setRepeatCount(0); // animation repeat count
         animationtxt.setRepeatMode(1); // repeat animation (left to right, right to left )
@@ -109,6 +134,45 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     public void createAccount(View v) {
         setContentView(R.layout.activity_create_account);
+        Button create = findViewById(R.id.createAccountButton);
+        final TextView emailTxt = findViewById(R.id.emailEditText);
+        final TextView password = findViewById(R.id.passwordEditText);
+        final TextView userName = findViewById(R.id.nameEditText);
+
+        create.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseAuthRegister(emailTxt.getText().toString(), password.getText().toString(), userName.getText().toString());
+            }
+        });
+    }
+
+    private void firebaseAuthRegister(String user, String pass, final String name) {
+        mAuth.createUserWithEmailAndPassword(user, pass)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(name).build();
+
+                            user.updateProfile(profileUpdates);
+                            currentUser = user;
+
+                            updateUI();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            //updateUI(null);
+                        }
+                    }
+                });
     }
 
 
@@ -286,6 +350,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
+            firebaseAuthLogin(mEmail, mPassword);
+
 
             try {
                 // Simulate network access.
@@ -312,11 +378,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 finish();
-
-                // If success call MainActivity class
-                Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
-                //myIntent.putExtra("key", value); //Optional parameters
-                LoginActivity.this.startActivity(myIntent);
+                //updateUI();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -327,6 +389,35 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected void onCancelled() {
             mAuthTask = null;
         }
+    }
+
+    private void updateUI() {
+        // If success call MainActivity class
+        Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+        //myIntent.putExtra("email", currentUser.getEmail()); //Optional parameters
+        LoginActivity.this.startActivity(myIntent);
+    }
+
+    private void firebaseAuthLogin(String mEmail, String mPassword) {
+        mAuth.signInWithEmailAndPassword(mEmail, mPassword)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            currentUser = user;
+                            updateUI();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
     }
 }
 

@@ -39,6 +39,7 @@ public class RecyclerViewFragment extends Fragment {
     }
 
     private void initializeData() {
+        // TODO: Need to get this data from Google Cloud for each user.
         classes = new ArrayList<>();
         classes.add(new Class("Intro to Psy", "PSY 1402","Mr Wilson"));
         classes.add(new Class("Intro to Computing", "CS 4518","Tian Guo"));

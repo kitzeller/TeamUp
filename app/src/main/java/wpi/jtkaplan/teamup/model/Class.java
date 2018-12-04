@@ -1,5 +1,8 @@
 package wpi.jtkaplan.teamup.model;
 
+/**
+ * Class model
+ */
 public class Class {
     String name;
     String id;

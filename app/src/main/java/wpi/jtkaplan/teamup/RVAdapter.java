@@ -46,7 +46,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ClassViewHolder> {
             });
         }
 
-        public void setColor(int c){
+        public void setColor(int c) {
             cv.setBackgroundResource(c);
         }
     }
@@ -77,7 +77,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ClassViewHolder> {
         // i refers to class index in classes list
         //System.out.println(i);
         int color = R.color.LIGHTGRAY;
-        switch (i){
+        switch (i) {
             case 0:
                 color = R.color.LIGHTCORAL;
                 break;

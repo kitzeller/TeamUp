@@ -1,5 +1,8 @@
 package wpi.jtkaplan.teamup.model;
 
+/**
+ * Group model
+ */
 public class Group {
     String name;
     Class classObject;

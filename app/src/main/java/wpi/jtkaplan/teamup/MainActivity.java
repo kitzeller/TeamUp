@@ -24,12 +24,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // This controls the ButtonNavigation view
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     Fragment selectedFragment = null;
 
+                    // Select Fragments based on which tab is selected
                     switch (item.getItemId()) {
                         case R.id.nav_home:
                             selectedFragment = new HomeFragment();

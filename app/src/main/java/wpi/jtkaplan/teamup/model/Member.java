@@ -1,5 +1,8 @@
 package wpi.jtkaplan.teamup.model;
 
+/**
+ * Member model
+ */
 public class Member {
     String name;
     String age;

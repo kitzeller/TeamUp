@@ -1,6 +1,5 @@
 package wpi.jtkaplan.teamup;
 
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -16,57 +15,14 @@ import wpi.jtkaplan.teamup.model.Class;
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ClassViewHolder> {
 
-    public static class ClassViewHolder extends RecyclerView.ViewHolder {
+    private Class addClassClass = new Class("Add A New Class!", "", "");
 
-        CardView cv;
-        TextView className;
-        TextView classID;
 
-        ClassViewHolder(View itemView) {
-            super(itemView);
-            cv = (CardView) itemView.findViewById(R.id.cv);
-
-            className = (TextView) itemView.findViewById(R.id.class_name);
-            classID = (TextView) itemView.findViewById(R.id.class_id);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast toast = Toast.makeText(view.getContext(),
-                            "You clicked class " + classID.getText(),
-                            Toast.LENGTH_SHORT);
-
-                    toast.show();
-
-                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
-                    HomeFragment myFragment = new HomeFragment();
-                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, myFragment).addToBackStack(null).commit();
-
-                }
-            });
-        }
-
-        public void setColor(int c) {
-            cv.setBackgroundResource(c);
-        }
-    }
 
     List<Class> classes;
-
     RVAdapter(List<Class> classes) {
         this.classes = classes;
-    }
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
-
-    @Override
-    public ClassViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item, viewGroup, false);
-        ClassViewHolder cvh = new ClassViewHolder(v);
-        return cvh;
+        this.classes.add(addClassClass);
     }
 
     @Override
@@ -88,8 +44,73 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ClassViewHolder> {
                 color = R.color.LIGHTGREEN;
         }
 
+        if (i == classes.indexOf(addClassClass)) {
+            classViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //TODO add a new activity for adding a new class!
+                    Toast toast = Toast.makeText(view.getContext(),
+                            "THIS IS A SPECIAL CARD USED TO ADD A NEW CLASS",
+                            Toast.LENGTH_SHORT);
+
+                    toast.show();
+
+                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                    AddClassFragment myFragment = new AddClassFragment();
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, myFragment).addToBackStack(null).commit();
+
+                }
+            });
+        }
 
         classViewHolder.setColor(color);
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    @Override
+    public ClassViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item, viewGroup, false);
+        ClassViewHolder cvh = new ClassViewHolder(v);
+        return cvh;
+    }
+
+    public static class ClassViewHolder extends RecyclerView.ViewHolder {
+
+        CardView cv;
+        TextView className;
+        TextView classID;
+
+        ClassViewHolder(View itemView) {
+            super(itemView);
+            cv = itemView.findViewById(R.id.cv);
+
+            className = itemView.findViewById(R.id.class_name);
+            classID = itemView.findViewById(R.id.class_id);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast toast = Toast.makeText(view.getContext(),
+                            "You clicked class " + classID.getText(),
+                            Toast.LENGTH_SHORT);
+
+                    toast.show();
+
+                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                    HomeFragment myFragment = new HomeFragment();
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, myFragment).addToBackStack(null).commit();
+
+                }
+            });
+        }
+
+        public void setColor(int c) {
+            cv.setBackgroundResource(c);
+        }
     }
 
     @Override

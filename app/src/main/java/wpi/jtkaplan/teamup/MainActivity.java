@@ -19,8 +19,11 @@ public class MainActivity extends AppCompatActivity {
 
         //I added this if statement to keep the selected fragment when rotating the device
         if (savedInstanceState == null) {
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                    new HomeFragment()).commit();
+
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new HomeFragment()).commit();
+                    new ClassFragment()).commit();
         }
     }
 
@@ -34,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
                     // Select Fragments based on which tab is selected
                     switch (item.getItemId()) {
                         case R.id.nav_home:
-                            selectedFragment = new HomeFragment();
+                            //selectedFragment = new HomeFragment();
+                            // TODO: Add funtionality for different home screen depending on if Profesor or Student
+                            selectedFragment = new ClassFragment();
                             break;
                         case R.id.nav_favorites:
                             selectedFragment = new RecyclerViewFragment();

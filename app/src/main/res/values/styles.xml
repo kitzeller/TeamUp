@@ -7,6 +7,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="floatingActionButtonStyle">@style/Widget.Design.FloatingActionButton</item>
+        <item name="bottomNavigationStyle">@style/Widget.Design.BottomNavigationView</item>
     </style>
+
+
+
 
 </resources>

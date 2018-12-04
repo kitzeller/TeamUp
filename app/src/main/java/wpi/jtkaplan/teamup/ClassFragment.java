@@ -1,10 +1,10 @@
 package wpi.jtkaplan.teamup;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +19,6 @@ import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
 import com.hootsuite.nachos.tokenizer.SpanChipTokenizer;
 
 import java.util.ArrayList;
-
-import wpi.jtkaplan.teamup.model.Class;
 
 /**
  * Class for creating a class
@@ -43,23 +41,25 @@ public class ClassFragment extends Fragment{
         tags.add("Thing");
 
         NachoTextView nv = v.findViewById(R.id.nacho_text_view);
-        nv.setChipTokenizer(new SpanChipTokenizer<>(getActivity(), new ChipSpanChipCreator() {
+        nv.setChipTokenizer(new SpanChipTokenizer<ChipSpan>(getActivity(), new ChipSpanChipCreator() {
             @Override
             public ChipSpan createChip(@NonNull Context context, @NonNull CharSequence text, Object data) {
-                if (tags.contains(text.toString())) {
-                    return new ChipSpan(context, text, ContextCompat.getDrawable(getActivity(), R.mipmap.ic_launcher), data);
-                }
-
-                return new ChipSpan(context, "null", ContextCompat.getDrawable(getActivity(), R.mipmap.ic_launcher), data);
+                return new ChipSpan(context, text, ContextCompat.getDrawable(getActivity(), R.mipmap.ic_launcher), data);
             }
 
             @Override
             public void configureChip(@NonNull ChipSpan chip, @NonNull ChipConfiguration chipConfiguration) {
-                if (!chip.getText().toString().equals("null")){
-                    super.configureChip(chip, chipConfiguration);
-                }
+                super.configureChip(chip, chipConfiguration);
             }
-        }, ChipSpan.class));
+        }, ChipSpan.class) {
+            @Override
+            public CharSequence terminateToken(CharSequence text, @Nullable Object data) {
+                if (!tags.contains(text.toString())) {
+                    return "";
+                }
+                return super.terminateToken(text, data);
+            }
+        });
 
 
 

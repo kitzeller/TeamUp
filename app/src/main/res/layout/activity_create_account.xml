@@ -2,7 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
+    android:id="@+id/CA_constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -16,7 +16,7 @@
     <!-- Login progress -->
 
     <Button
-        android:id="@+id/createAccountButton"
+        android:id="@+id/CA_createAccountButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
@@ -26,7 +26,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/emailEditText"
+        android:id="@+id/CA_emailEditText"
         style="@style/Base.Widget.MaterialComponents.TextInputEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,13 +34,13 @@
         android:ems="10"
         android:hint="@string/prompt_email"
         android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toTopOf="@+id/bioEditText"
+        app:layout_constraintBottom_toTopOf="@+id/CA_bioEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/passwordEditText"
+        android:id="@+id/CA_passwordEditText"
         style="@style/Base.Widget.MaterialComponents.TextInputEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -48,58 +48,59 @@
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/createAccountButton"
+        app:layout_constraintBottom_toTopOf="@+id/CA_createAccountButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/nameEditText"
+        android:id="@+id/CA_nameEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="Name"
         android:inputType="textPersonName"
-        android:text="Name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <RadioButton
-        android:id="@+id/studentRadioButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Student"
-        app:layout_constraintBottom_toTopOf="@+id/emailEditText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/professorRadioButton"
-        app:layout_constraintTop_toBottomOf="@+id/nameEditText" />
-
-    <RadioButton
-        android:id="@+id/professorRadioButton"
+        android:id="@+id/CA_studentRadioButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Professor"
-        app:layout_constraintBottom_toTopOf="@+id/emailEditText"
-        app:layout_constraintEnd_toStartOf="@+id/studentRadioButton"
+        android:checked="true"
+        android:text="Student"
+        app:layout_constraintBottom_toTopOf="@+id/CA_emailEditText"
+        app:layout_constraintEnd_toStartOf="@+id/CA_professorRadioButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/CA_nameEditText" />
+
+    <RadioButton
+        android:id="@+id/CA_professorRadioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Professor"
+        app:layout_constraintBottom_toTopOf="@+id/CA_emailEditText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/CA_studentRadioButton"
+        app:layout_constraintTop_toBottomOf="@+id/CA_nameEditText" />
 
     <EditText
-        android:id="@+id/bioEditText"
+        android:id="@+id/CA_bioEditText"
         style="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox"
         android:layout_width="214dp"
         android:layout_height="84dp"
         android:layout_marginBottom="32dp"
         android:ems="10"
+        android:hint="A Bit About Myself..."
         android:inputType="textMultiLine"
-        android:text="A Bit About Myself..."
-        app:layout_constraintBottom_toTopOf="@+id/passwordEditText"
+        app:layout_constraintBottom_toTopOf="@+id/CA_passwordEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

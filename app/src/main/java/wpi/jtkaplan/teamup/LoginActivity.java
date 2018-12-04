@@ -9,7 +9,6 @@ import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -37,7 +36,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,18 +52,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
     private static final String TAG = "LoginActivity";
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
 
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
@@ -94,7 +81,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mAuth = FirebaseAuth.getInstance();
 
-        ImageView img_animation = (ImageView) findViewById(R.id.loginImageView);
+        ImageView img_animation = findViewById(R.id.loginImageView);
         Display display = getWindowManager().getDefaultDisplay();
         float width = display.getWidth();
         float height = display.getHeight();
@@ -104,7 +91,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         animation.setRepeatMode(1); // repeat animation (left to right, right to left )
         img_animation.startAnimation(animation); // start animation
 
-        TextView txt_login = (TextView) findViewById(R.id.loginTextView);
+        TextView txt_login = findViewById(R.id.loginTextView);
         TranslateAnimation animationtxt = new TranslateAnimation(0, 0, height - 100, 0); // new TranslateAnimation(xFrom,xTo, yFrom,yTo)
         animationtxt.setDuration(2000); // animation duration
         animationtxt.setRepeatCount(0); // animation repeat count
@@ -133,46 +120,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     public void createAccount(View v) {
-        setContentView(R.layout.activity_create_account);
-        Button create = findViewById(R.id.createAccountButton);
-        final TextView emailTxt = findViewById(R.id.emailEditText);
-        final TextView password = findViewById(R.id.passwordEditText);
-        final TextView userName = findViewById(R.id.nameEditText);
-
-        create.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                firebaseAuthRegister(emailTxt.getText().toString(), password.getText().toString(), userName.getText().toString());
-            }
-        });
-    }
-
-    private void firebaseAuthRegister(String user, String pass, final String name) {
-        mAuth.createUserWithEmailAndPassword(user, pass)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-
-                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(name).build();
-
-                            user.updateProfile(profileUpdates);
-                            currentUser = user;
-
-                            updateUI();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
-                        }
-                    }
-                });
+        // If the user is to create a new account, call CreateAccountActivity class
+        Intent myIntent = new Intent(LoginActivity.this, CreateAccountActivity.class);
+        //myIntent.putExtra("email", currentUser.getEmail()); //Optional parameters
+        LoginActivity.this.startActivity(myIntent);
     }
 
 
@@ -226,11 +177,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-
-        if (mAuthTask != null) {
-            return;
-        }
-
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -266,8 +212,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             focusView.requestFocus();
         } else {
             // Kick off a background task to perform the user login attempt.
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            this.firebaseAuthLogin(email, password);
         }
     }
 
@@ -331,64 +276,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
-    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-            firebaseAuthLogin(mEmail, mPassword);
-
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-
-            if (success) {
-                finish();
-                //updateUI();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-        }
     }
 
     private void updateUI() {

@@ -33,7 +33,7 @@ public class ClassFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v  = inflater.inflate(R.layout.fragment_create_class, container, false);
 
-        tags = new ArrayList<>();
+        tags = new ArrayList<String>();
         tags.add("Java");
         tags.add("Python");
         tags.add("OOP");
@@ -62,14 +62,11 @@ public class ClassFragment extends Fragment{
         });
 
 
-
-
-
         nv.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
         nv.enableEditChipOnTouch(true, true);
 
-        String[] suggestions = new String[]{"Tortilla Chips", "Melted Cheese", "Salsa", "Guacamole", "Mexico", "Jalapeno"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, suggestions);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, tags);
         nv.setAdapter(adapter);
 
         ArrayList<String> tags = (ArrayList<String>) nv.getChipValues();

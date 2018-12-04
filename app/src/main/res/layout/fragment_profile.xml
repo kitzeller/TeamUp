@@ -28,7 +28,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:orientation="vertical">
 
             <TextView
@@ -57,12 +57,11 @@
         android:text="@string/welcome"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <LinearLayout
+    <Button
+        android:id="@+id/btnMyers"
         android:layout_width="match_parent"
-        android:layout_height="239dp"
-        android:orientation="vertical">
-
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:text="@string/myer_briggs_test" />
 
     <Button
         android:id="@+id/sign_out"

@@ -24,7 +24,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/blue_gradient" />
+        android:background="@drawable/animation_list" />
 
     <Button
         android:id="@+id/LOGIN_createAccountButton"

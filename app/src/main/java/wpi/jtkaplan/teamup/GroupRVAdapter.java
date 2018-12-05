@@ -52,7 +52,7 @@ public class GroupRVAdapter<UserType extends User> extends RecyclerView.Adapter<
 
         MemberViewHolder(View itemView) {
             super(itemView);
-            memberView = itemView.findViewById(R.id.profile_details_fragment);
+            memberView = itemView.findViewById(R.id.cv_profile);
 
             memberName = itemView.findViewById(R.id.account_name);
             memberEmail = itemView.findViewById(R.id.account_email);

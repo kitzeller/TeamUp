@@ -16,8 +16,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
-import wpi.jtkaplan.teamup.image.PicassoCircleTransformation;
 import wpi.jtkaplan.teamup.model.Student;
+import wpi.jtkaplan.teamup.image.PicassoCircleTransformation;
 
 public class MemberFragment extends Fragment {
 

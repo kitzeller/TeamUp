@@ -110,7 +110,7 @@ public class ClassesRVAdapter extends RecyclerView.Adapter<ClassesRVAdapter.Clas
         }
 
         public void setColor(int c) {
-            cv.setBackgroundResource(c);
+            cv.setCardBackgroundColor(cv.getResources().getColor(c));
         }
     }
 

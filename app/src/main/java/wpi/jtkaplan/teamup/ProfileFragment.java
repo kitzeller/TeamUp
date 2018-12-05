@@ -69,10 +69,10 @@ public class ProfileFragment extends Fragment {
 
         ((TextView) v.findViewById(R.id.account_email)).setText(user.getEmail());
 
-        //ViewGroup profileDetailsView = (ViewGroup) v.findViewById(R.id.profile_details_fragment);
-        MemberFragment childFragment = new MemberFragment();
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.profile_details_fragment, childFragment).commit();
+        // Not necessary
+//        MemberFragment childFragment = new MemberFragment();
+//        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+//        transaction.replace(R.id.profile_details_fragment, childFragment).commit();
 
 
         if (user.getName() != null) {

@@ -16,6 +16,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import wpi.jtkaplan.teamup.image.PicassoCircleTransformation;
 import wpi.jtkaplan.teamup.model.Member;
 
 public class MemberFragment extends Fragment {
@@ -46,7 +47,8 @@ public class MemberFragment extends Fragment {
 
         // Using Picasso API to load image from URL into ImageView
         if (photoUrl != null) {
-            Picasso.get().load(photoUrl).into(profileImage);
+            Picasso.get().load(photoUrl).transform(new PicassoCircleTransformation())
+            .into(profileImage);
         }
 
         return v;

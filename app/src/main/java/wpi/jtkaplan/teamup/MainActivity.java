@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = new ClassFragment();
                             break;
                         case R.id.nav_favorites:
-                            selectedFragment = new RecyclerViewFragment();
+                            selectedFragment = new ClassesRecyclerViewFragment();
                             break;
                         case R.id.nav_profile:
                             selectedFragment = new ProfileFragment();

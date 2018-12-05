@@ -13,7 +13,7 @@ public class AddClassFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        //TODO : try to actually add this class in the backend.
         return inflater.inflate(R.layout.fragment_join_class, container, false);
-
     }
 }

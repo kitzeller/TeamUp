@@ -14,22 +14,6 @@
 
     </FrameLayout>
 
-    <com.github.clans.fab.FloatingActionMenu
-        android:id="@+id/menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/bottom_navigation"
-        android:layout_alignParentEnd="true">
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/menu_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_label="Add Class"
-            app:fab_size="mini" />
-
-    </com.github.clans.fab.FloatingActionMenu>
-
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"

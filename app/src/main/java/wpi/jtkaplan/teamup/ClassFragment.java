@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * Class for creating a class
  */
 
-public class ClassFragment extends Fragment{
+public class ClassFragment extends Fragment { // TODO :: REFACTOR THE NAME FOR CLASSFRAGMENT -- THIS IS MISLEADING?
 
     private ArrayList<String> tags;
 
@@ -33,6 +33,7 @@ public class ClassFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v  = inflater.inflate(R.layout.fragment_create_class, container, false);
 
+        // TODO : Populate tags from firebase
         tags = new ArrayList<String>();
         tags.add("Java");
         tags.add("Python");

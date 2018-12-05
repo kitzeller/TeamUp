@@ -1,16 +1,9 @@
 package wpi.jtkaplan.teamup;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
@@ -39,10 +33,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 
 import wpi.jtkaplan.teamup.model.Member;
 
@@ -68,6 +60,12 @@ public class ProfileFragment extends Fragment {
         Member user = new Member(mUser.getDisplayName(), "18", mUser.getEmail());
 
         ((TextView) v.findViewById(R.id.account_email)).setText(user.getEmail());
+
+        //ViewGroup profileDetailsView = (ViewGroup) v.findViewById(R.id.profile_details_fragment);
+        MemberFragment childFragment = new MemberFragment();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.profile_details_fragment, childFragment).commit();
+
 
         if (user.getName() != null) {
             ((TextView) v.findViewById(R.id.account_name)).setText(user.getName());
@@ -140,7 +138,6 @@ public class ProfileFragment extends Fragment {
             }
         }
     }
-
 
     private void uploadImage(String path) {
         Uri file = Uri.fromFile(new File(path));

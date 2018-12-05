@@ -15,7 +15,7 @@ import java.util.List;
 
 import wpi.jtkaplan.teamup.model.Class;
 
-public class RecyclerViewFragment extends Fragment {
+public class ClassesRecyclerViewFragment extends Fragment {
 
     private List<Class> classes;
     private RecyclerView rv;
@@ -39,7 +39,7 @@ public class RecyclerViewFragment extends Fragment {
 
     private void initializeData() {
         // TODO: Need to get this data from Google Cloud for each user.
-        classes = new ArrayList<>();
+        classes = new ArrayList<Class>();
         classes.add(new Class("Intro to Psy", "PSY 1402","Mr Wilson"));
         classes.add(new Class("Intro to Computing", "CS 4518","Tian Guo"));
         classes.add(new Class("Fun and Games", "FUN 101","Mr Jake"));
@@ -47,7 +47,7 @@ public class RecyclerViewFragment extends Fragment {
     }
 
     private void initializeAdapter() {
-        RVAdapter adapter = new RVAdapter(classes);
+        ClassesRVAdapter adapter = new ClassesRVAdapter(classes);
         adapter.getItemId(classes.size() - 1);
         rv.setAdapter(adapter);
     }

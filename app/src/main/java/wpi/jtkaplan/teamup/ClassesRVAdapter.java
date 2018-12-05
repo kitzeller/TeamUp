@@ -1,5 +1,6 @@
 package wpi.jtkaplan.teamup;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -13,20 +14,19 @@ import java.util.List;
 
 import wpi.jtkaplan.teamup.model.Class;
 
-public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ClassViewHolder> {
+public class ClassesRVAdapter extends RecyclerView.Adapter<ClassesRVAdapter.ClassViewHolder> {
 
     private Class addClassClass = new Class("Add A New Class!", "", "");
 
-
-
     List<Class> classes;
-    RVAdapter(List<Class> classes) {
+
+    ClassesRVAdapter(List<Class> classes) {
         this.classes = classes;
         this.classes.add(addClassClass);
     }
 
     @Override
-    public void onBindViewHolder(ClassViewHolder classViewHolder, int i) {
+    public void onBindViewHolder(@NonNull ClassViewHolder classViewHolder, int i) {
         classViewHolder.className.setText(classes.get(i).getName());
         classViewHolder.classID.setText(classes.get(i).getId());
 
@@ -101,8 +101,9 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ClassViewHolder> {
                     toast.show();
 
                     AppCompatActivity activity = (AppCompatActivity) view.getContext();
-                    HomeFragment myFragment = new HomeFragment();
-                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, myFragment).addToBackStack(null).commit();
+                    GroupRecyclerViewFragment memberViewFragment = new GroupRecyclerViewFragment();
+                    //HomeFragment myFragment = new HomeFragment();
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, memberViewFragment).addToBackStack(null).commit();
 
                 }
             });

@@ -10,13 +10,13 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import wpi.jtkaplan.teamup.model.Member;
+import wpi.jtkaplan.teamup.model.User;
 
-public class GroupRVAdapter extends RecyclerView.Adapter<GroupRVAdapter.MemberViewHolder> {
+public class GroupRVAdapter<UserType extends User> extends RecyclerView.Adapter<GroupRVAdapter.MemberViewHolder> {
 
-    List<Member> members;
+    List<UserType> members;
 
-    GroupRVAdapter(List<Member> members) {
+    GroupRVAdapter(List<UserType> members) {
         this.members = members;
     }
 

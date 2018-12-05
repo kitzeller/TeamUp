@@ -16,7 +16,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
-import wpi.jtkaplan.teamup.model.Member;
+import wpi.jtkaplan.teamup.model.Student;
 
 public class MemberFragment extends Fragment {
 
@@ -32,7 +32,7 @@ public class MemberFragment extends Fragment {
         mUser = mAuth.getCurrentUser(); // TODO : change this to get the requested (not necessarily current) user
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
-        Member user = new Member(mUser.getDisplayName(), "18", mUser.getEmail());
+        Student user = new Student(mUser.getDisplayName(), "18", mUser.getEmail());
 
         ((TextView) v.findViewById(R.id.account_email)).setText(user.getEmail());
 

@@ -2,7 +2,6 @@ package wpi.jtkaplan.teamup;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -41,7 +40,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.IOException;
 
-import wpi.jtkaplan.teamup.model.Member;
+import wpi.jtkaplan.teamup.model.Student;
 
 public class ProfileFragment extends Fragment {
 
@@ -65,7 +64,7 @@ public class ProfileFragment extends Fragment {
         mUser = mAuth.getCurrentUser();
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
-        Member user = new Member(mUser.getDisplayName(), "18", mUser.getEmail());
+        Student user = new Student(mUser.getDisplayName(), "18", mUser.getEmail());
 
         ((TextView) v.findViewById(R.id.account_email)).setText(user.getEmail());
 

@@ -8,11 +8,13 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -56,6 +58,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
+    private AnimationDrawable anim;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -80,6 +83,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         populateAutoComplete();
 
         mAuth = FirebaseAuth.getInstance();
+
+
+        ImageView container = (ImageView) findViewById(R.id.LOGIN_background);
+
+        anim = (AnimationDrawable) container.getBackground();
+        anim.setEnterFadeDuration(2000);
+        anim.setExitFadeDuration(2000);
+
 
         ImageView img_animation = findViewById(R.id.LOGIN_loginImageView);
         Display display = getWindowManager().getDefaultDisplay();
@@ -305,6 +316,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                     }
                 });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (anim != null && !anim.isRunning())
+            anim.start();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (anim != null && anim.isRunning())
+            anim.stop();
     }
 }
 

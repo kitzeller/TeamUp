@@ -9,4 +9,12 @@ public class Professor extends User {
     public Professor(String name, String age, String email, String bio) {
         super(name, age, email, bio);
     }
+
+    public Professor() {
+        super();
+    }
+
+    public String loc() {
+        return "Professors";
+    }
 }

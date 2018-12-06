@@ -30,7 +30,6 @@ public class GroupRecyclerViewFragment
         View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
 
         rv = view.findViewById(R.id.rv);
-
         LinearLayoutManager llm = new LinearLayoutManager(this.getActivity());
         rv.setLayoutManager(llm);
         rv.setHasFixedSize(true);

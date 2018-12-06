@@ -15,10 +15,17 @@ public class Member extends RelationalElement<Student, Class> {
     public boolean isInGroup; // TODO : Implement finding out whether this member is in a group or not
     //TODO : implement a rating system within the model
 
+    public Member() {
+        super();
+    }
 
     // TODO : implement
     public Member(Student s, Class c) {
         super(s, c);
+    }
+
+    public String loc() {
+        return "Members";
     }
 
 }

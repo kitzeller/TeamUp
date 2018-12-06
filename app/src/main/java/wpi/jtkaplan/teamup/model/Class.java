@@ -54,4 +54,8 @@ public class Class extends DeclarativeElement {
         this.professor = professor;// TODO : Re-asses; will we ever call setProfessor? Once a class is made, the professor is fixed.
         // TODO : Also NOTE : Professors have a list of classes they are a part of, and changing the professor of a class will need to also change the classes of a professor.
     }
+
+    public String loc() {
+        return "Classes";
+    }
 }

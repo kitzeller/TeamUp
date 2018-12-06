@@ -18,4 +18,13 @@ public class Skills extends RelationalElement<Student, Class> {
         super(s, c);
     }
 
+    public Skills() {
+        super();
+    }
+
+
+    @Override
+    public String loc() {
+        return "Skills";
+    }
 }

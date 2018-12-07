@@ -214,7 +214,8 @@ public class ProfileFragment extends Fragment {
                                 .build();
 
                         mUser.updateProfile(profileUpdates);
-                        Picasso.get().load(downloadUrl).into(profileImage);
+                        Picasso.get().load(downloadUrl).transform(new PicassoCircleTransformation())
+                                .into(profileImage);
 
                     }
                 })

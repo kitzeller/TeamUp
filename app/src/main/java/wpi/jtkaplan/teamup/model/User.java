@@ -1,6 +1,11 @@
 package wpi.jtkaplan.teamup.model;
 
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * Students and Professors both inherit from this.
@@ -10,6 +15,9 @@ public abstract class User extends DeclarativeElement {
     private String age;
     private String email;
     private String bio; // TODO bio related stuff
+    private HashMap<String, Boolean> classUIDs = new HashMap<String, Boolean>();
+
+    @Exclude
     private DatabaseReference dbr = null;
 
     public User(String name, String age, String email, String bio) {
@@ -69,6 +77,33 @@ public abstract class User extends DeclarativeElement {
 
     public void setEmail(String email) {
         this.email = email;
+        updateRTDB();
+    }
+
+    /**
+     * NOTE : THIS PERFORMS YOUR ValueEventListener ON EACH CLASS THE STUDENT IS TAKING
+     * THIS IS INTENDED TO BE USED WHEN POPULATING
+     */
+    public void getClassesAsync(ValueEventListener valueEventListener) {
+        for (String c : classUIDs.keySet()) {
+            dbr.child(new Class().loc()).child(c).addListenerForSingleValueEvent(valueEventListener);
+        }
+    }
+
+    public void addClasses(Collection<? extends Class> classes) {
+        for (Class c : classes) {
+            this.classUIDs.put(c.UID, true);
+        }
+        updateRTDB();
+    }
+
+    public void addClass(Class c) {
+        this.classUIDs.put(c.UID, true);
+        updateRTDB();
+    }
+
+    public void removeClass(Class c) {
+        this.classUIDs.remove(c.UID);
         updateRTDB();
     }
 }

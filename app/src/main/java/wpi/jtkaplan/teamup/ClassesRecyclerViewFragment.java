@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wpi.jtkaplan.teamup.model.Class;
+import wpi.jtkaplan.teamup.model.Student;
 
 public class ClassesRecyclerViewFragment extends Fragment {
 
@@ -40,7 +41,9 @@ public class ClassesRecyclerViewFragment extends Fragment {
     private void initializeData() {
         // TODO: Need to get this data from Google Cloud for each user.
         classes = new ArrayList<Class>();
-        classes.add(new Class("Intro to Psy", "PSY 1402","Mr Wilson"));
+        Class democlass = new Class("Intro to Psy", "PSY 1402", "Mr Wilson");
+        new Student("test", "test", "test").addClass(democlass);
+        classes.add(democlass);
         classes.add(new Class("Intro to Computing", "CS 4518","Tian Guo"));
         classes.add(new Class("Fun and Games", "FUN 101","Mr Jake"));
         classes.add(new Class("Intro to Games", "IMGD 1001","Mr Baker"));

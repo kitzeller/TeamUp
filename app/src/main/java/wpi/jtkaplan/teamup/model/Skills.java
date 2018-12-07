@@ -1,5 +1,8 @@
 package wpi.jtkaplan.teamup.model;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
 /**
  * Member model
  */
@@ -12,7 +15,7 @@ public class Skills extends RelationalElement<Student, Class> {
      * For our case, a Skill is a student's abilities for a class
      * */
 
-    // TODO : implement a dictionary of {skillname : skillscore} to keep track of this users skills in this class
+    // TODO : implement a dictionary of {String skillname : int skillscore} to keep track of this user's skills in this class
 
     public Skills(Student s, Class c) {
         super(s, c);
@@ -22,9 +25,23 @@ public class Skills extends RelationalElement<Student, Class> {
         super();
     }
 
-
     @Override
-    public String loc() {
+    public final String loc() {
         return "Skills";
     }
+
+    @Override
+    public void getAsync(String uid, ValueEventListener valueEventListener) {
+        DatabaseReference child = db.get().child(this.getUID()).child(uid);
+        child.addListenerForSingleValueEvent(valueEventListener);
+    }
+
+    @Override
+    public void getAsync(ValueEventListener valueEventListener) {
+        DatabaseReference child = db.get().child(this.getUID()).child(this.getUID());
+        child.addListenerForSingleValueEvent(valueEventListener);
+    }
+
+
+
 }

@@ -17,7 +17,8 @@ public class Student extends User {
         super();
     }
 
-    public String loc() {
+    @Override
+    public final String loc() {
         return "Students";
     }
 

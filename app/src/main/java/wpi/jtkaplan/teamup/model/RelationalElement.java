@@ -1,11 +1,11 @@
 package wpi.jtkaplan.teamup.model;
 
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ValueEventListener;
 
 abstract class RelationalElement
         <UserOfRelation extends DeclarativeElement,
-                ObjectOfRelation extends DeclarativeElement> implements Element {
+                ObjectOfRelation extends DeclarativeElement> extends Element {
 
     public UserOfRelation user;
     public ObjectOfRelation object;
@@ -20,19 +20,25 @@ abstract class RelationalElement
         this.object = object;
     }
 
+    @Exclude
     public final static String getUID(String userUID, String objectUID) {
         return userUID + sep + objectUID;
     }
 
+    @Exclude
+    public abstract void getAsync(ValueEventListener valueEventListener); // Used to get existing Elements from the database
+
+    @Exclude
     public final String getUID() {
         return user.UID + sep + object.UID;
     }
 
+    /*
     @Override
-    public void get(String uid, ValueEventListener vel) {
-        DatabaseReference child = db.get().child(this.loc()).child(uid);
+    public void getAsync(String uid, ValueEventListener vel) {
+        DatabaseReference child = db.get().child(loc).child(uid);
         child.addListenerForSingleValueEvent(vel);
-    }
+    }*/
 
     /*
     public void get(ValueEventListener vel) {

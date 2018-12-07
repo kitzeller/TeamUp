@@ -87,12 +87,15 @@ public abstract class User extends DeclarativeElement {
 
     public void addClasses(Collection<? extends Class> classes) {
         for (Class c : classes) {
-            this.classUIDs.put(c.UID, true);
+            this.addClass(c);
         }
-        updateRTDB();
+
     }
 
     public void addClass(Class c) {
+        if (this instanceof Student) {
+            c.addStudent((Student) this);
+        }
         this.classUIDs.put(c.UID, true);
         updateRTDB();
     }

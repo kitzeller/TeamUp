@@ -7,17 +7,24 @@ abstract class RelationalElement
         <UserOfRelation extends DeclarativeElement,
                 ObjectOfRelation extends DeclarativeElement> extends Element {
 
-    public UserOfRelation user;
-    public ObjectOfRelation object;
-
+    @Exclude
     private static final String sep = ":"; // the separator for joining UIDs of the user/object
+    protected String S_UID;
+    protected String O_UID;
+    @Exclude
+    UserOfRelation user;
+    @Exclude
+    ObjectOfRelation object;
 
     public RelationalElement() {
     }
 
     protected RelationalElement(UserOfRelation user, ObjectOfRelation object) {
         this.user = user;
+        S_UID = this.user.UID;
+
         this.object = object;
+        O_UID = this.object.UID;
     }
 
     @Exclude

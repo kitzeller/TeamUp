@@ -5,7 +5,9 @@ import android.support.annotation.NonNull;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -16,6 +18,7 @@ public class Class extends DeclarativeElement {
     String name;
     String professorUID;
     HashMap<String, Boolean> memberUIDs = new HashMap<String, Boolean>(); // Members are students that belong to this class. This allows students to quickly/neatly index many skills for many classes
+    HashMap<String, Boolean> groupUIDs = new HashMap<String, Boolean>(); // Groups are collections of members.
 
     String id;// id is used for the school (ie, the CRN, or BIO3432, etc)
 
@@ -84,6 +87,37 @@ public class Class extends DeclarativeElement {
     public void setProfessor(Professor professor) {
         this.professorUID = professor.UID;// TODO : Re-assess; will we ever call setProfessor? Once a class is made, the professor is fixed.
         // TODO : Also NOTE : Professors have a list of classes they are a part of, and changing the professor of a class will need to also change the classes of a professor.
+    }
+
+    /**
+     * NOTE : THIS PERFORMS YOUR ValueEventListener ON EACH MEMBER OF THE CLASS
+     * THIS IS INTENDED TO BE USED WHEN POPULATING
+     */
+    public void getMembersAsync(ValueEventListener valueEventListener) {
+        for (String c : memberUIDs.keySet()) {
+            dbr.child(this.loc()).child(c).addListenerForSingleValueEvent(valueEventListener);
+        }
+    }
+
+    public Member addStudent(Student student) {
+        return new Member(student, this);
+    }
+
+    public void addMembers(Collection<? extends Member> members) {
+        for (Member m : members) {
+            this.memberUIDs.put(m.getUID(), true);
+        }
+        updateRTDB();
+    }
+
+    public void addMember(Member member) {
+        this.memberUIDs.put(member.getUID(), true);
+        updateRTDB();
+    }
+
+    public void removeMember(Member member) {
+        this.memberUIDs.remove(member.getUID());
+        updateRTDB();
     }
 
     @Exclude

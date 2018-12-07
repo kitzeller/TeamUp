@@ -1,6 +1,7 @@
 package wpi.jtkaplan.teamup.model;
 
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ValueEventListener;
 
 /**
@@ -18,19 +19,32 @@ public class Member extends RelationalElement<Student, Class> {
     public boolean isInGroup; // TODO : Implement finding out whether this member is in a group or not
     //TODO : implement a rating system within the model
 
+    @Exclude
+    DatabaseReference dbr = null;
 
-    public Member() {
+    // NOTE : MEMBER OBJECTS ARE CREATED BY CALLING "ADD STUDENT" FROM A CLASS
+    Member() {
         super();
     }
 
     // TODO : implement
-    public Member(Student s, Class c) {
+    Member(Student s, Class c) {
         super(s, c);
+        updateRTDB();
     }
 
+    @Exclude
+    private void updateRTDB() {
+        if (dbr == null) {
+            dbr = db.get().child(this.loc()).child(this.getUID());
+            dbr.setValue(this);
+        } else {
+            dbr.setValue(this);
+        }
+    }
 
     @Override
-    public final String loc() {
+    final String loc() {
         return "Members";
     }
 
@@ -50,5 +64,6 @@ public class Member extends RelationalElement<Student, Class> {
         DatabaseReference child = db.get().child(new Skills().loc()).child(this.getUID());
         child.addListenerForSingleValueEvent(valueEventListener);
     }
+
 
 }

@@ -10,7 +10,7 @@ abstract class RelationalElement
     public UserOfRelation user;
     public ObjectOfRelation object;
 
-    private static final String sep = ":"; // the seperator for joining UIDs of the user/object
+    private static final String sep = ":"; // the separator for joining UIDs of the user/object
 
     public RelationalElement() {
     }

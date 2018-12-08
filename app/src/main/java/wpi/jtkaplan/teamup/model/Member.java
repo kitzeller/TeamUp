@@ -28,7 +28,7 @@ public class Member extends RelationalElement<Student, Class> {
     }
 
     // TODO : implement
-    Member(Student s, Class c) {
+    public Member(Student s, Class c) {
         super(s, c);
         updateRTDB();
     }

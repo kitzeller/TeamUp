@@ -29,7 +29,7 @@ public class AddClassFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //TODO: send database reference of class
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();
                 Intent intent = new Intent(v.getContext(), SkillsTestActivity.class);
                 intent.putExtra("ClassID", classID);

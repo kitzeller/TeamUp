@@ -4,10 +4,12 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -36,6 +38,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -45,7 +50,9 @@ import java.io.File;
 import java.io.IOException;
 
 import wpi.jtkaplan.teamup.image.PicassoCircleTransformation;
+import wpi.jtkaplan.teamup.model.Professor;
 import wpi.jtkaplan.teamup.model.Student;
+import wpi.jtkaplan.teamup.model.User;
 
 public class ProfileFragment extends Fragment {
 
@@ -58,6 +65,13 @@ public class ProfileFragment extends Fragment {
     private FirebaseUser mUser;
     private String m_Text = "";
     private EditText textBio;
+    private TextView textPersonality;
+    private TextView textGroups;
+    private TextView textClasses;
+
+    private String loc;
+
+    User user = null;
 
 
     @Nullable
@@ -68,19 +82,109 @@ public class ProfileFragment extends Fragment {
         mUser = mAuth.getCurrentUser();
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
-        Student user = new Student(mUser.getDisplayName(), "18", mUser.getEmail());
+        profileImage = v.findViewById(R.id.profile_account_picture);
+        textBio = v.findViewById(R.id.PROFILE_bio);
+        textClasses = v.findViewById(R.id.PROFILE_classTxt);
+        textGroups = v.findViewById(R.id.PROFILE_groupTxt);
+        textPersonality = v.findViewById(R.id.PROFILE_perTxt);
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String uid = preferences.getString("wpi.user.uuid", null);
+        loc = preferences.getString("wpi.user.loc", null);
+        System.out.println("Loading " + uid + " " + loc);
+
+        if (loc.equals("Professors")){
+            ((TextView) v.findViewById(R.id.PROFILE_perLabel)).setText("");
+            ((TextView) v.findViewById(R.id.PROFILE_groupLabel)).setText("");
+            ((TextView) v.findViewById(R.id.PROFILE_groupTxt)).setText("");
+            ((TextView) v.findViewById(R.id.PROFILE_perTxt)).setText("");
+        }
+
+        User.getUserFromPref(uid, loc, new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (loc.equals("Professors")){
+                    user = dataSnapshot.getValue(Professor.class);
+                } else {
+                    user = dataSnapshot.getValue(Student.class);
+                }
+                user.UID = uid;
+                user.dbr = wpi.jtkaplan.teamup.model.db.get().child(loc).child(uid);
+                System.out.println("uid " + user.UID);
+                loginSetup(v);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+        Button signOut = v.findViewById(R.id.sign_out);
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+                getActivity().finish();
+            }
+        });
+
+        final Button btnEdit = (Button) v.findViewById(R.id.PROFILE_btnEdit);
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Creating the instance of PopupMenu
+                PopupMenu popup = new PopupMenu(getActivity(), btnEdit);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater()
+                        .inflate(R.menu.popup_menu, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getItemId() == R.id.one) {
+                            textBio.setEnabled(true);
+                            textBio.requestFocus();
+                        } else if (item.getItemId() == R.id.two) {
+                            editMyersBriggs();
+                        } else if (item.getItemId() == R.id.three){
+                            openMyersBriggs();
+                        }
+                        Toast.makeText(
+                                getActivity(),
+                                "You Clicked : " + item.getTitle(),
+                                Toast.LENGTH_SHORT
+                        ).show();
+                        return true;
+                    }
+                });
+
+                popup.show(); //showing popup menu
+            }
+        }); //closing the setOnClickListener method
+
+
+        return v;
+    }
+
+    private void loginSetup(View v) {
         ((TextView) v.findViewById(R.id.profile_account_email)).setText(user.getEmail());
 
         if (user.getName() != null) {
             ((TextView) v.findViewById(R.id.profile_account_name)).setText(user.getName());
         }
 
-        profileImage = v.findViewById(R.id.profile_account_picture);
         Uri photoUrl = mUser.getPhotoUrl();
         String uid = mUser.getUid();
-        textBio = v.findViewById(R.id.PROFILE_bio);
+        textBio.setText(user.getBio());
         textBio.setEnabled(false);
+
+        if (loc.equals("Students")){
+            textPersonality.setText(user.getPersonality());
+            textClasses.setText(Integer.toString(user.getNumClasses()));
+        }
 
         // Using Picasso API to load image from URL into ImageView
         if (photoUrl != null) {
@@ -127,63 +231,18 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        Button signOut = v.findViewById(R.id.sign_out);
-        signOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(getActivity(), LoginActivity.class));
-                getActivity().finish();
-            }
-        });
-
-        final Button btnEdit = (Button) v.findViewById(R.id.PROFILE_btnEdit);
-        btnEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Creating the instance of PopupMenu
-                PopupMenu popup = new PopupMenu(getActivity(), btnEdit);
-                //Inflating the Popup using xml file
-                popup.getMenuInflater()
-                        .inflate(R.menu.popup_menu, popup.getMenu());
-
-                //registering popup with OnMenuItemClickListener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getItemId() == R.id.one) {
-                            textBio.setEnabled(true);
-                            textBio.requestFocus();
-                        } else if (item.getItemId() == R.id.two) {
-                            editMyersBriggs();
-                        } else if (item.getItemId() == R.id.three){
-                            openMyersBriggs();
-                        }
-                        Toast.makeText(
-                                getActivity(),
-                                "You Clicked : " + item.getTitle(),
-                                Toast.LENGTH_SHORT
-                        ).show();
-                        return true;
-                    }
-                });
-
-                popup.show(); //showing popup menu
-            }
-        }); //closing the setOnClickListener method
-
         textBio.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // If the event is a key-down event on the "enter" button
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     textBio.setEnabled(false);
+                    user.setBio(textBio.getText().toString());
                     return true;
                 }
                 return false;
             }
         });
-
-        return v;
     }
 
     @Override
@@ -249,7 +308,8 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 m_Text = input.getText().toString();
-                //TODO: Set Myers Briggs result
+                user.setPersonality(m_Text);
+                textPersonality.setText(m_Text);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

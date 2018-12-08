@@ -1,7 +1,10 @@
 package wpi.jtkaplan.teamup;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -19,10 +22,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+import wpi.jtkaplan.teamup.model.Professor;
+import wpi.jtkaplan.teamup.model.Student;
+
 public class CreateAccountActivity extends AppCompatActivity {
 
     private static final String TAG = "CreateAccountActivity";
-    protected String userType = "Student";
+    protected String userType = "Students";
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private EditText nameEditText = null;
@@ -61,14 +67,14 @@ public class CreateAccountActivity extends AppCompatActivity {
             public void onClick(View v) {
                 studentRadioButton.setChecked(false);
                 professorRadioButton.setChecked(true);
-                userType = "Professor";
+                userType = "Professors";
             }
         });
         studentRadioButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 professorRadioButton.setChecked(false);
                 studentRadioButton.setChecked(true);
-                userType = "Student";
+                userType = "Students";
             }
         });
 
@@ -181,6 +187,26 @@ public class CreateAccountActivity extends AppCompatActivity {
 
                                 user.updateProfile(profileUpdates);
                                 currentUser = user;
+
+                                if (userType.equals("Students")) {
+                                    // Shared Preferences
+                                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(CreateAccountActivity.this);
+                                    SharedPreferences.Editor editor = sp.edit();
+                                    editor.putString("wpi.user.loc", userType);
+                                    Student student = new Student(name, null, email, bioEditText.getText().toString());
+                                    student.addUIDEmailRef();
+                                    editor.putString("wpi.user.uuid", student.UID);
+                                    editor.commit();
+                                } else { //Professor
+                                    // Shared Preferences
+                                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(CreateAccountActivity.this);
+                                    SharedPreferences.Editor editor = sp.edit();
+                                    editor.putString("wpi.user.loc", userType);
+                                    Professor professor = new Professor(name, null, email, bioEditText.getText().toString());
+                                    professor.addUIDEmailRef();
+                                    editor.putString("wpi.user.uuid", professor.UID);
+                                    editor.commit();
+                                }
 
                                 updateUI();
                             } else {

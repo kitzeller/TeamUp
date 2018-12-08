@@ -6,12 +6,14 @@ import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -38,9 +40,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import wpi.jtkaplan.teamup.model.Student;
+import wpi.jtkaplan.teamup.model.User;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -293,6 +301,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // If success call MainActivity class
         Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
         //myIntent.putExtra("email", currentUser.getEmail()); //Optional parameters
+
         LoginActivity.this.startActivity(myIntent);
     }
 
@@ -306,7 +315,40 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             currentUser = user;
-                            updateUI();
+
+                            User.getUIDEmailRef(mEmail, new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    String data = (String) dataSnapshot.getValue();
+                                    String[] values = data.split("\\:\\:\\:");
+                                    String uid = values[0];
+                                    String loc = values[1];
+
+                                    // Shared Preferences
+                                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                                    SharedPreferences.Editor editor = sp.edit();
+                                    editor.putString("wpi.user.loc", loc);
+                                    editor.putString("wpi.user.uuid", uid);
+                                    editor.commit();
+
+                                    System.out.println("Setting " + uid + " " + loc);
+
+                                    Toast.makeText(LoginActivity.this, "Updated shared preferences" + data,
+                                            Toast.LENGTH_SHORT).show();
+
+
+
+                                    updateUI();
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    Toast.makeText(LoginActivity.this, "Cancelled?",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());

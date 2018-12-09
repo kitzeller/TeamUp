@@ -26,6 +26,7 @@ public abstract class User extends DeclarativeElement {
     public DatabaseReference dbr = null;
 
     public User(String name, @Nullable String personality, String email, String bio) {
+        super();
         this.name = name;
         if (personality == null) {
             this.personality = "";
@@ -38,6 +39,7 @@ public abstract class User extends DeclarativeElement {
     }
 
     public User(String name, @Nullable String personality, String email) {
+        super();
         this.name = name;
         if (personality == null) {
             this.personality = "";

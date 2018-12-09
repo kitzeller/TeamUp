@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
-import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Collection;
@@ -13,7 +12,7 @@ import java.util.HashMap;
 /**
  * Class model
  */
-@IgnoreExtraProperties
+//@IgnoreExtraProperties
 public class Class extends DeclarativeElement {
     private String name;
     private String professorUID;
@@ -44,6 +43,7 @@ public class Class extends DeclarativeElement {
                  @NonNull String id,
                  @NonNull String professorUID // Professor is NEVER null, because a class can't be taught without a professor
     ) {
+        super();
         this.name = name;
         this.id = id;
         this.professorUID = professorUID;
@@ -52,6 +52,7 @@ public class Class extends DeclarativeElement {
 
     // Dummy class for Adding classes
     public Class(String name) {
+        super();
         this.name = name;
         this.id = "";
     }
@@ -60,16 +61,16 @@ public class Class extends DeclarativeElement {
     private void updateRTDB() {
         // TODO: Fix multiple database versions of the same class
 
-        if (UID != null) {
-            dbr = db.get().child(this.loc()).child(UID);
-            dbr.setValue(this);
-        } else if (dbr == null) {
-            dbr = db.get().child(this.loc()).push();
+        if (dbr == null && UID != null) { // if we have a UID, but no reference in the db
+            dbr = db.get().child(this.loc()).child(UID); // get the db reference by UID
+        } else if (dbr == null && UID == null) { // if we have no uid, and no reference in the db
+            dbr = db.get().child(this.loc()).push();// make a new reference and set the UID accordingly
             this.UID = dbr.getKey();
-            dbr.setValue(this);
-        } else {
-            dbr.setValue(this);
         }
+        if (UID == null && dbr != null) {
+            System.out.print("ERROR IN UPDATERTDB:: ENCOUNTERED A DBR WITHOUT A UID");
+        }
+        dbr.setValue(this);
     }
 
     public String getProfessorUID() {
@@ -78,54 +79,60 @@ public class Class extends DeclarativeElement {
 
 
     //TODO: I had to comment out UpdateRTDB as extra classes were being made due to unknown UID
+    @Exclude
     public void setProfessorUID(String professorUID) {
         this.professorUID = professorUID;
-        //updateRTDB();
+        updateRTDB();
     }
 
     public HashMap<String, Boolean> getMemberUIDs() {
         return memberUIDs;
     }
 
+    @Exclude
     public void setMemberUIDs(HashMap<String, Boolean> memberUIDs) {
         this.memberUIDs = memberUIDs;
-        //updateRTDB();
+        updateRTDB();
     }
 
     public HashMap<String, Boolean> getGroupUIDs() {
         return groupUIDs;
     }
 
+    @Exclude
     public void setGroupUIDs(HashMap<String, Boolean> groupUIDs) {
         this.groupUIDs = groupUIDs;
-        //updateRTDB();
+        updateRTDB();
     }
 
     public HashMap<String, Boolean> getSkills() {
         return skills;
     }
 
+    @Exclude
     public void setSkills(HashMap<String, Boolean> skills) {
         this.skills = skills;
-        //updateRTDB();
+        updateRTDB();
     }
 
     public String getName() {
         return name;
     }
 
+    @Exclude
     public void setName(String name) {
         this.name = name;
-        //updateRTDB();
+        updateRTDB();
     }
 
     public String getId() {
         return id;
     }
 
+    @Exclude
     public void setId(String id) {
         this.id = id;
-        //updateRTDB();
+        updateRTDB();
     }
 
     /**

@@ -16,7 +16,8 @@ import wpi.jtkaplan.teamup.model.Class;
 
 public class ClassesRVAdapter extends RecyclerView.Adapter<ClassesRVAdapter.ClassViewHolder> {
 
-    private Class addClassClass = new Class("Add A New Class!", "", "");
+    // Dummmy class (doesn't get added to db)
+    private Class addClassClass = new Class("Add A New Class!");
 
     List<Class> classes;
 
@@ -84,6 +85,10 @@ public class ClassesRVAdapter extends RecyclerView.Adapter<ClassesRVAdapter.Clas
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item, viewGroup, false);
         ClassViewHolder cvh = new ClassViewHolder(v);
         return cvh;
+    }
+
+    public void addClass(Class c){
+        classes.add(c);
     }
 
     public static class ClassViewHolder extends RecyclerView.ViewHolder {

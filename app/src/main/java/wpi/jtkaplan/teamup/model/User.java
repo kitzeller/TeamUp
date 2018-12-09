@@ -119,9 +119,18 @@ public abstract class User extends DeclarativeElement {
      * THIS IS INTENDED TO BE USED WHEN POPULATING
      */
     public void getClassesAsync(ValueEventListener valueEventListener) {
+        DatabaseReference database = db.get().child("Classes");
+
         for (String c : classUIDs.keySet()) {
-            dbr.child(new Class().loc()).child(c).addListenerForSingleValueEvent(valueEventListener);
+            System.out.println("Adding class from User - Class: " + c);
+            database.child(c).addListenerForSingleValueEvent(valueEventListener);
         }
+    }
+
+    public void getSingleClassAsync(String classID, ValueEventListener valueEventListener) {
+        DatabaseReference database = db.get().child("Classes");
+        System.out.println("Adding class from User - Class: " + classID);
+        database.child(classID).addListenerForSingleValueEvent(valueEventListener);
     }
 
     public void addClasses(Collection<? extends Class> classes) {
@@ -170,5 +179,13 @@ public abstract class User extends DeclarativeElement {
     public void setNumGroups(int numGroups) {
         this.numGroups = numGroups;
         updateRTDB();
+    }
+
+    public HashMap<String, Boolean> getClassUIDs() {
+        return classUIDs;
+    }
+
+    public void setClassUIDs(HashMap<String, Boolean> classUIDs) {
+        this.classUIDs = classUIDs;
     }
 }

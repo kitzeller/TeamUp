@@ -30,26 +30,30 @@ public class Class extends DeclarativeElement {
         super();
     }
 
+//    public Class(@NonNull String name,
+//                 @NonNull String id,
+//                 @NonNull Professor professor // Professor is NEVER null, because a class can't be taught without a professor
+//    ) {
+//        this.name = name;
+//        this.id = id;
+//        this.professorUID = professor.UID;
+//        updateRTDB();
+//    }
+
     public Class(@NonNull String name,
                  @NonNull String id,
-                 @NonNull Professor professor // Professor is NEVER null, because a class can't be taught without a professor
+                 @NonNull String professorUID // Professor is NEVER null, because a class can't be taught without a professor
     ) {
         this.name = name;
         this.id = id;
-        this.professorUID = professor.UID;
+        this.professorUID = professorUID;
         updateRTDB();
     }
 
-
-    @Deprecated // TODO : DELETE THIS CONSTRUCTOR  -- A CLASS MUST BE MADE BY A PROFESSOR
-    public Class(@NonNull String name,
-                 @NonNull String id,
-                 @NonNull String professor // Professor is NEVER null, because a class can't be taught without a professor
-    ) {
+    // Dummy class for Adding classes
+    public Class(String name) {
         this.name = name;
-        this.id = id;
-        this.professorUID = "-";//new Professor(professor, "null", "null");
-        updateRTDB();
+        this.id = "";
     }
 
     @Exclude
@@ -64,6 +68,42 @@ public class Class extends DeclarativeElement {
         } else {
             dbr.setValue(this);
         }
+    }
+
+    public String getProfessorUID() {
+        return professorUID;
+    }
+
+    public void setProfessorUID(String professorUID) {
+        this.professorUID = professorUID;
+        updateRTDB();
+    }
+
+    public HashMap<String, Boolean> getMemberUIDs() {
+        return memberUIDs;
+    }
+
+    public void setMemberUIDs(HashMap<String, Boolean> memberUIDs) {
+        this.memberUIDs = memberUIDs;
+        updateRTDB();
+    }
+
+    public HashMap<String, Boolean> getGroupUIDs() {
+        return groupUIDs;
+    }
+
+    public void setGroupUIDs(HashMap<String, Boolean> groupUIDs) {
+        this.groupUIDs = groupUIDs;
+        updateRTDB();
+    }
+
+    public HashMap<String, Boolean> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(HashMap<String, Boolean> skills) {
+        this.skills = skills;
+        updateRTDB();
     }
 
     public String getName() {
@@ -82,15 +122,6 @@ public class Class extends DeclarativeElement {
     public void setId(String id) {
         this.id = id;
         updateRTDB();
-    }
-
-    public String getProfessor() {
-        return professorUID;
-    }
-
-    public void setProfessor(Professor professor) {
-        this.professorUID = professor.UID;// TODO : Re-assess; will we ever call setProfessor? Once a class is made, the professor is fixed.
-        // TODO : Also NOTE : Professors have a list of classes they are a part of, and changing the professor of a class will need to also change the classes of a professor.
     }
 
     /**
@@ -129,7 +160,7 @@ public class Class extends DeclarativeElement {
      * THIS IS INTENDED TO BE USED WHEN POPULATING
      */
     public void getSkillsAsync(ValueEventListener valueEventListener) {
-        dbr.child(new Skills().loc()).addListenerForSingleValueEvent(valueEventListener);
+        dbr.child("skills").addListenerForSingleValueEvent(valueEventListener);
     }
 
     /*public void addSkills(Collection<? extends Skills> skills) {

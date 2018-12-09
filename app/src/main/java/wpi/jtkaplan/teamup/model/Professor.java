@@ -18,4 +18,5 @@ public class Professor extends User {
     public final String loc() {
         return "Professors";
     }
+
 }

@@ -1,26 +1,35 @@
 package wpi.jtkaplan.teamup;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
+import wpi.jtkaplan.teamup.model.Class;
 import wpi.jtkaplan.teamup.model.Member;
+import wpi.jtkaplan.teamup.model.Professor;
 import wpi.jtkaplan.teamup.model.Skill;
 import wpi.jtkaplan.teamup.model.Skills;
 import wpi.jtkaplan.teamup.model.Student;
+import wpi.jtkaplan.teamup.model.User;
 
 public class SkillsTestActivity extends AppCompatActivity {
 
     private ArrayList<String> skillsList = new ArrayList<>();
-    private Skills skills;
+    //private Skills skills;
     private SkillAdapter adapter;
+    private String classUID;
+
+    private TextView skillsTitle;
 
     private Student user;
     private wpi.jtkaplan.teamup.model.Class lecture;
@@ -29,38 +38,66 @@ public class SkillsTestActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        classUID = intent.getStringExtra("uid");
+        System.out.println("Class UID Intent " + classUID);
+
         setContentView(R.layout.activity_skills_test);
 
-        user = new Student("Bob", "18", "email@email.com");
-        lecture = new wpi.jtkaplan.teamup.model.Class("science", "1234", "tian");
-        member = new Member(user, lecture);
-        skills = new Skills(user, lecture);
+        skillsTitle = findViewById(R.id.skillsTestTitle);
 
-        lecture.addSkill("Python");
-        lecture.addSkill("Java");
+        String uid = UserPreferences.read(UserPreferences.UID_VALUE,null);
+        String loc = UserPreferences.read(UserPreferences.LOC_VALUE,null);
 
-
-        lecture.getSkillsAsync(new ValueEventListener() {
+        User.getUserFromPref(uid, loc, new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                skills = dataSnapshot.getValue(Skills.class); //TODO: returning nothing
+                if (loc.equals("Students")) {
+                    user = dataSnapshot.getValue(Student.class);
+                    user.getSingleClassAsync(classUID, new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            lecture = dataSnapshot.getValue(Class.class);
+                            skillsTitle.setText(lecture.getName() + " Skills Test");
 
-                for (String s: skills.skills.keySet()){
-                    skillsList.add(s);
+                            member = new Member(user,lecture);
+                            // TODO: Find how Skills class will work
+                            //skills = new Skills(user,lecture);
+                            lecture.getSkillsAsync(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    HashMap<String,Boolean> map = (HashMap<String,Boolean>) dataSnapshot.getValue(); //TODO: returning nothing
+
+                                    for (String s: map.keySet()){
+                                        skillsList.add(s);
+                                    }
+
+                                    adapter = new SkillAdapter(getBaseContext(), skillsList);
+                                    ListView lvSkills = (ListView) findViewById(R.id.question_list);
+                                    lvSkills.setAdapter(adapter);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    //error
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
-
-                adapter = new SkillAdapter(getBaseContext(), skillsList);
-                ListView lvSkills = (ListView) findViewById(R.id.question_list);
-                lvSkills.setAdapter(adapter);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                //error
+
             }
         });
-
-
     }
 
 

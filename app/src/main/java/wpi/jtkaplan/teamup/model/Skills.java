@@ -70,6 +70,11 @@ public class Skills extends RelationalElement<Student, Class> {
         updateRTDB();
     }
 
+    public HashMap<String, Integer> getSkills() {
+        return skills;
+    }
 
-
+    public void setSkills(HashMap<String, Integer> skills) {
+        this.skills = skills;
+    }
 }

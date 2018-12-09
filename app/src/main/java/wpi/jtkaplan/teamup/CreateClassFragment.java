@@ -11,7 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.hootsuite.nachos.ChipConfiguration;
 import com.hootsuite.nachos.NachoTextView;
 import com.hootsuite.nachos.chip.ChipSpan;
@@ -21,6 +26,10 @@ import com.hootsuite.nachos.tokenizer.SpanChipTokenizer;
 
 import java.util.ArrayList;
 
+import wpi.jtkaplan.teamup.model.Professor;
+import wpi.jtkaplan.teamup.model.Student;
+import wpi.jtkaplan.teamup.model.User;
+
 /**
  * Class for creating a class
  */
@@ -28,6 +37,14 @@ import java.util.ArrayList;
 public class CreateClassFragment extends Fragment { // TODO :: REFACTOR THE NAME FOR CLASSFRAGMENT -- THIS IS MISLEADING?
 
     private ArrayList<String> tags;
+
+    private EditText txtClassName;
+    private EditText txtClassID;
+    private EditText txtGroupSize;
+    private NachoTextView nv;
+    private Button submit;
+    private Professor prof;
+
 
     @Nullable
     @Override
@@ -42,8 +59,30 @@ public class CreateClassFragment extends Fragment { // TODO :: REFACTOR THE NAME
         tags.add("Extra");
         tags.add("Thing");
 
-        Button submit = v.findViewById(R.id.btnCreateClass);
-        NachoTextView nv = v.findViewById(R.id.nacho_text_view);
+        submit = v.findViewById(R.id.btnCreateClass);
+        txtClassName = v.findViewById(R.id.txtClassEdit);
+        txtGroupSize = v.findViewById(R.id.txtGroupEdit);
+        txtClassID = v.findViewById(R.id.txtIDEdit);
+        nv = v.findViewById(R.id.nacho_text_view);
+
+        String uid = UserPreferences.read(UserPreferences.UID_VALUE, null);
+        String loc = UserPreferences.read(UserPreferences.LOC_VALUE, null);
+
+        User.getUserFromPref(uid, loc, new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (loc.equals("Professors")) {
+                    prof = dataSnapshot.getValue(Professor.class);
+                    addClassListener();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         nv.setChipTokenizer(new SpanChipTokenizer<ChipSpan>(getActivity(), new ChipSpanChipCreator() {
             @Override
             public ChipSpan createChip(@NonNull Context context, @NonNull CharSequence text, Object data) {
@@ -68,18 +107,29 @@ public class CreateClassFragment extends Fragment { // TODO :: REFACTOR THE NAME
         nv.enableEditChipOnTouch(true, true);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, tags);
         nv.setAdapter(adapter);
-        ArrayList<String> tags = (ArrayList<String>) nv.getChipValues();
 
+        return v;
+    }
+
+    public void addClassListener() {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Create Class in here
+                wpi.jtkaplan.teamup.model.Class classToCreate = new wpi.jtkaplan.teamup.model.Class(txtClassName.getText().toString(), txtClassID.getText().toString(), prof.UID);
+                prof.addClass(classToCreate);
 
-                // TODO: add skills to class
+                tags = (ArrayList<String>) nv.getChipValues();
+                for (String skill: tags){
+                    classToCreate.addSkill(skill);
+                }
+
+                Toast.makeText(
+                        getActivity(),
+                        "Class Created: " + classToCreate.getId(),
+                        Toast.LENGTH_SHORT
+                ).show();
 
             }
         });
-
-        return v;
     }
 }

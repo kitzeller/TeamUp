@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 public class AddClassFragment extends Fragment {
 
+    private String classID;
+    private EditText idInput;
 
     @Nullable
     @Override
@@ -22,8 +24,7 @@ public class AddClassFragment extends Fragment {
         //TODO : try to actually add this class in the backend.
         View v = inflater.inflate(R.layout.fragment_join_class, container, false);
 
-        EditText idInput = v.findViewById(R.id.JOIN_classidEditText);
-        final String classID = idInput.getText().toString();
+        idInput = v.findViewById(R.id.JOIN_classidEditText);
         Button btn = v.findViewById(R.id.JOIN_addButton);
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -32,13 +33,13 @@ public class AddClassFragment extends Fragment {
                 //TODO: send database reference of class
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();
                 Intent intent = new Intent(v.getContext(), SkillsTestActivity.class);
-                intent.putExtra("ClassID", classID);
+                // classID is the class UID
+                classID = idInput.getText().toString();
+                intent.putExtra("uid", classID);
+                System.out.println("classID from frag " + classID);
                 activity.startActivity(intent);
-
             }
         });
-
-
 
         return v;
     }

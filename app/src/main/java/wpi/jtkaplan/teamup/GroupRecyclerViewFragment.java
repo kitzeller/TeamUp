@@ -41,14 +41,14 @@ public class GroupRecyclerViewFragment
     }
 
     private void initializeData() {
-        // TODO: Need to get this data from Google Cloud for each member of the current group.
+        // TODO: Need to get this data from Google Cloud for each member of the current group or class.
         members = new ArrayList<User>();
-        members.add(new Professor("DIFFERENT MODEL", "x", "x"));
-        members.add(new Student("Harvey Milk", "21", "im@straight.com"));
-        members.add(new Student("Frida Kahlo", "32", "nothurt@faithful.com"));
-        members.add(new Student("Edward Culkin", "8", "wheredid@gowrong.com"));
-        members.add(new Student("John Adams", "15", "emaildoesnt@exist.yet"));
-        members.add(new Student("Abraham Lincoln", "209", "dont@shootme.bro"));
+//        members.add(new Professor("DIFFERENT MODEL", "x", "x"));
+//        members.add(new Student("Harvey Milk", "21", "im@straight.com"));
+//        members.add(new Student("Frida Kahlo", "32", "nothurt@faithful.com"));
+//        members.add(new Student("Edward Culkin", "8", "wheredid@gowrong.com"));
+//        members.add(new Student("John Adams", "15", "emaildoesnt@exist.yet"));
+//        members.add(new Student("Abraham Lincoln", "209", "dont@shootme.bro"));
     }
 
     private void initializeAdapter() {

@@ -10,14 +10,12 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import wpi.jtkaplan.teamup.model.Skill;
-
 public class SkillAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<Skill> skills;
+    private ArrayList<String> skills;
 
-    public SkillAdapter(Context context, ArrayList<Skill> skills) {
+    public SkillAdapter(Context context, ArrayList<String> skills) {
         this.context = context;
         this.skills = skills;
     }
@@ -28,7 +26,7 @@ public class SkillAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public String getItem(int position) {
         return skills.get(position);
     }
 
@@ -51,17 +49,17 @@ public class SkillAdapter extends BaseAdapter {
         }
 
         //get current item to be displayed
-        final Skill currentSkill = (Skill) getItem(position);
+        final String currentSkill = (String) getItem(position);
 
         //sets the text for item name
-        viewHolder.skillName.setText(currentSkill.getSkillName());
+        viewHolder.skillName.setText(currentSkill);
 
-        //TODO get selected skill level from selected radio button using onClickListener and save to skill
         viewHolder.levelChoices.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final int level = viewHolder.levelChoices.getCheckedRadioButtonId();
-                    currentSkill.setSkillLevel(level);
+                    //TODO call addSkill function on user to set skill with skillLevel
+                    //[user].addSkill(currentSkill, level);
                 }
             });
 

@@ -71,6 +71,7 @@ public class CreateClassFragment extends Fragment { // TODO :: REFACTOR THE NAME
         nv.setAdapter(adapter);
 
         ArrayList<String> tags = (ArrayList<String>) nv.getChipValues();
+        //TODO: add skills to class
 
         return v;
     }

@@ -19,6 +19,7 @@ public class Class extends DeclarativeElement {
     String professorUID;
     HashMap<String, Boolean> memberUIDs = new HashMap<String, Boolean>(); // Members are students that belong to this class. This allows students to quickly/neatly index many skills for many classes
     HashMap<String, Boolean> groupUIDs = new HashMap<String, Boolean>(); // Groups are collections of members.
+    HashMap<String, Boolean> skills = new HashMap<>(); //skills required for class
 
     String id;// id is used for the school (ie, the CRN, or BIO3432, etc)
 
@@ -117,6 +118,31 @@ public class Class extends DeclarativeElement {
 
     public void removeMember(Member member) {
         this.memberUIDs.remove(member.getUID());
+        updateRTDB();
+    }
+
+    /**
+     * NOTE : THIS PERFORMS YOUR ValueEventListener ON EACH CLASS THE STUDENT IS TAKING
+     * THIS IS INTENDED TO BE USED WHEN POPULATING
+     */
+    public void getSkillsAsync(ValueEventListener valueEventListener) {
+        dbr.child(new Skills().loc()).addListenerForSingleValueEvent(valueEventListener);
+    }
+
+    /*public void addSkills(Collection<? extends Skills> skills) {
+        for (Skills s : skills) {
+            this.addSkill(s);
+        }
+
+    }*/
+
+    public void addSkill(String s) {
+        this.skills.put(s, true);
+        updateRTDB();
+    }
+
+    public void removeSkill(String s) {
+        this.skills.remove(s);
         updateRTDB();
     }
 

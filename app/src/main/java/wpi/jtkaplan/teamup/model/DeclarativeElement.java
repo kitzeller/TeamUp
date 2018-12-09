@@ -20,9 +20,11 @@ abstract class DeclarativeElement extends Element {
 
         if (dbr == null && UID != null) { // if we have a UID, but no reference in the db
             dbr = db.get().child(this.loc()).child(UID); // get the db reference by UID
+            dbr.keepSynced(true);
         } else if (dbr == null && UID == null) { // if we have no uid, and no reference in the db
             dbr = db.get().child(this.loc()).push();// make a new reference and set the UID accordingly
             this.UID = dbr.getKey();
+            dbr.keepSynced(true);
         }
         if (UID == null && dbr != null) {
             System.out.print("ERROR IN UPDATERTDB:: ENCOUNTERED A DBR WITHOUT A UID");

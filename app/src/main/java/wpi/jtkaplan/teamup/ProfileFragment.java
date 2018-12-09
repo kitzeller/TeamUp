@@ -4,18 +4,15 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
@@ -25,7 +22,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -130,7 +126,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        final Button btnEdit = (Button) v.findViewById(R.id.PROFILE_btnEdit);
+        final Button btnEdit = v.findViewById(R.id.PROFILE_btnEdit);
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,11 +176,11 @@ public class ProfileFragment extends Fragment {
         textBio.setText(user.getBio());
         textBio.setEnabled(false);
 
-        if (loc.equals("Students")){
+        if (loc.equals(new Student().loc())) {
             textPersonality.setText(user.getPersonality());
             textClasses.setText(Integer.toString(user.getNumClasses()));
             textGroups.setText(Integer.toString(user.getNumGroups()));
-        } else if (loc.equals("Professors")){
+        } else if (loc.equals(new Professor().loc())) {
             textClasses.setText(Integer.toString(user.getNumClasses()));
         }
 

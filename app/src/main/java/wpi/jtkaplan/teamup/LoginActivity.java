@@ -44,7 +44,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import wpi.jtkaplan.teamup.model.Student;
 import wpi.jtkaplan.teamup.model.User;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -92,7 +91,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mAuth = FirebaseAuth.getInstance();
 
 
-        ImageView container = (ImageView) findViewById(R.id.LOGIN_background);
+        ImageView container = findViewById(R.id.LOGIN_background);
 
         anim = (AnimationDrawable) container.getBackground();
         anim.setEnterFadeDuration(2000);
@@ -332,6 +331,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //                                    editor.putString("wpi.user.loc", loc);
 //                                    editor.putString("wpi.user.uuid", uid);
 //                                    editor.commit();
+                                    wpi.jtkaplan.teamup.model.db.preload(loc, uid);
 
                                     System.out.println("Setting " + uid + " " + loc);
 

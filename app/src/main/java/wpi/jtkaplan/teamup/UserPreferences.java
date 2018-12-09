@@ -4,11 +4,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import wpi.jtkaplan.teamup.model.Member;
+import wpi.jtkaplan.teamup.model.Skills;
+
 /**
  * Created by mac on 12/8/18.
  */
 
 public class UserPreferences {
+
+    private static Member member;
+    private static Skills skillsObj;
 
     private static SharedPreferences mSharedPref;
     public static final String UID_VALUE = "wpi.user.uuid";
@@ -34,5 +40,19 @@ public class UserPreferences {
         prefsEditor.commit();
     }
 
+    public static Member getMember() {
+        return member;
+    }
 
+    public static void setMember(Member member) {
+        UserPreferences.member = member;
+    }
+
+    public static Skills getSkillsObj() {
+        return skillsObj;
+    }
+
+    public static void setSkillsObj(Skills skillsObj) {
+        UserPreferences.skillsObj = skillsObj;
+    }
 }

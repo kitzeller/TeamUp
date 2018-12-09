@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import wpi.jtkaplan.teamup.model.Skills;
+
 public class SkillAdapter extends BaseAdapter {
 
     private Context context;
@@ -59,7 +61,8 @@ public class SkillAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     final int level = viewHolder.levelChoices.getCheckedRadioButtonId();
                     //TODO call addSkill function on user to set skill with skillLevel
-                    //[user].addSkill(currentSkill, level);
+                    Skills skillsObj = UserPreferences.getSkillsObj();
+                    skillsObj.addSkill(currentSkill, level);
                 }
             });
 

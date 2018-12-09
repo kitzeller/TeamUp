@@ -19,7 +19,7 @@ public class Skills extends RelationalElement<Student, Class> {
      * */
 
     //user's skills in this class
-    public HashMap<String, Integer> skills = new HashMap<String, Integer>();
+    private HashMap<String, Integer> skills = new HashMap<String, Integer>();
 
     @Exclude
     DatabaseReference dbr = null;

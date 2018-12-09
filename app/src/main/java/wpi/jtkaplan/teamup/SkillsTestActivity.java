@@ -28,7 +28,7 @@ import wpi.jtkaplan.teamup.model.User;
 public class SkillsTestActivity extends AppCompatActivity {
 
     private ArrayList<String> skillsList = new ArrayList<>();
-    //private Skills skills;
+    private Skills skillsObj;
     private SkillAdapter adapter;
     private String classUID;
 
@@ -63,15 +63,25 @@ public class SkillsTestActivity extends AppCompatActivity {
                     user.getSingleClassAsync(classUID, new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+                            System.out.println("datasnap: " + dataSnapshot.getValue());
+
                             lecture = dataSnapshot.getValue(Class.class);
-                            if (lecture == null){
-                                return;
-                            }
+                            System.out.println("Skills: " + lecture.getName());
+
                             skillsTitle.setText(lecture.getName() + " Skills Test");
 
+                            // Need to set UID and dbr to retrieve skills
+                            lecture.UID = classUID;
+                            lecture.dbr = wpi.jtkaplan.teamup.model.db.get().child("Classes").child(classUID);
+
+
                             member = new Member(user,lecture);
+
+                            // TODO: Pass Skills object to list adapter - using User Pref Singleton?
+                            skillsObj = new Skills(user,lecture);
+                            UserPreferences.setSkillsObj(skillsObj);
+
                             // TODO: Find how Skills class will work
-                            //skills = new Skills(user,lecture);
                             lecture.getSkillsAsync(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 
 import com.hootsuite.nachos.ChipConfiguration;
 import com.hootsuite.nachos.NachoTextView;
@@ -31,7 +32,7 @@ public class CreateClassFragment extends Fragment { // TODO :: REFACTOR THE NAME
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v  = inflater.inflate(R.layout.fragment_create_class, container, false);
+        View v = inflater.inflate(R.layout.fragment_create_class, container, false);
 
         // TODO : Populate tags from firebase
         tags = new ArrayList<String>();
@@ -41,6 +42,7 @@ public class CreateClassFragment extends Fragment { // TODO :: REFACTOR THE NAME
         tags.add("Extra");
         tags.add("Thing");
 
+        Button submit = v.findViewById(R.id.btnCreateClass);
         NachoTextView nv = v.findViewById(R.id.nacho_text_view);
         nv.setChipTokenizer(new SpanChipTokenizer<ChipSpan>(getActivity(), new ChipSpanChipCreator() {
             @Override
@@ -62,16 +64,21 @@ public class CreateClassFragment extends Fragment { // TODO :: REFACTOR THE NAME
             }
         });
 
-
         nv.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
         nv.enableEditChipOnTouch(true, true);
-
-
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, tags);
         nv.setAdapter(adapter);
-
         ArrayList<String> tags = (ArrayList<String>) nv.getChipValues();
-        //TODO: add skills to class
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: Create Class in here
+
+                // TODO: add skills to class
+
+            }
+        });
 
         return v;
     }

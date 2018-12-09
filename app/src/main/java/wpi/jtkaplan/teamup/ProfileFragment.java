@@ -70,7 +70,7 @@ public class ProfileFragment extends Fragment {
     private TextView textClasses;
 
     private String loc;
-
+    private String uid;
     User user = null;
 
 
@@ -88,9 +88,8 @@ public class ProfileFragment extends Fragment {
         textGroups = v.findViewById(R.id.PROFILE_groupTxt);
         textPersonality = v.findViewById(R.id.PROFILE_perTxt);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String uid = preferences.getString("wpi.user.uuid", null);
-        loc = preferences.getString("wpi.user.loc", null);
+        uid = UserPreferences.read(UserPreferences.UID_VALUE,null);
+        loc = UserPreferences.read(UserPreferences.LOC_VALUE,null);
         System.out.println("Loading " + uid + " " + loc);
 
         if (loc.equals("Professors")){

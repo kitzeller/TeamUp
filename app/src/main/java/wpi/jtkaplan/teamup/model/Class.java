@@ -54,7 +54,10 @@ public class Class extends DeclarativeElement {
 
     @Exclude
     private void updateRTDB() {
-        if (dbr == null) {
+        if (UID != null) {
+            dbr = db.get().child(this.loc()).child(UID);
+            dbr.setValue(this);
+        } else if (dbr == null) {
             dbr = db.get().child(this.loc()).push();
             this.UID = dbr.getKey();
             dbr.setValue(this);

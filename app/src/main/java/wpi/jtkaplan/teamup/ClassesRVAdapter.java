@@ -48,16 +48,24 @@ public class ClassesRVAdapter extends RecyclerView.Adapter<ClassesRVAdapter.Clas
             classViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO add a new activity for adding a new class!
                     Toast toast = Toast.makeText(view.getContext(),
-                            "THIS IS A SPECIAL CARD USED TO ADD A NEW CLASS",
+                            "Adding Class...",
                             Toast.LENGTH_SHORT);
 
                     toast.show();
-
                     AppCompatActivity activity = (AppCompatActivity) view.getContext();
-                    AddClassFragment myFragment = new AddClassFragment();
-                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, myFragment).addToBackStack(null).commit();
+
+                    if (UserPreferences.read(UserPreferences.LOC_VALUE,null).equals("Students")){
+                        System.out.println("Students");
+                        AddClassFragment myFragment = new AddClassFragment();
+                        activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, myFragment).addToBackStack(null).commit();
+
+                    } else if (UserPreferences.read(UserPreferences.LOC_VALUE,null).equals("Professors")){
+                        System.out.println("Professors");
+                        CreateClassFragment myFragment = new CreateClassFragment();
+                        activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, myFragment).addToBackStack(null).commit();
+
+                    }
 
                 }
             });
@@ -94,6 +102,8 @@ public class ClassesRVAdapter extends RecyclerView.Adapter<ClassesRVAdapter.Clas
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+
                     Toast toast = Toast.makeText(view.getContext(),
                             "You clicked class " + classID.getText(),
                             Toast.LENGTH_SHORT);
@@ -102,7 +112,6 @@ public class ClassesRVAdapter extends RecyclerView.Adapter<ClassesRVAdapter.Clas
 
                     AppCompatActivity activity = (AppCompatActivity) view.getContext();
                     GroupRecyclerViewFragment memberViewFragment = new GroupRecyclerViewFragment();
-                    //HomeFragment myFragment = new HomeFragment();
                     activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, memberViewFragment).addToBackStack(null).commit();
 
                 }

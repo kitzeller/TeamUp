@@ -6,17 +6,14 @@ import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -85,6 +82,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        UserPreferences.init(getApplicationContext());
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = findViewById(R.id.LOGIN_emailEditText);
@@ -325,18 +324,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                     String loc = values[1];
 
                                     // Shared Preferences
-                                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-                                    SharedPreferences.Editor editor = sp.edit();
-                                    editor.putString("wpi.user.loc", loc);
-                                    editor.putString("wpi.user.uuid", uid);
-                                    editor.commit();
+                                    UserPreferences.write(UserPreferences.LOC_VALUE, loc);
+                                    UserPreferences.write(UserPreferences.UID_VALUE, uid);
+
+//                                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+//                                    SharedPreferences.Editor editor = sp.edit();
+//                                    editor.putString("wpi.user.loc", loc);
+//                                    editor.putString("wpi.user.uuid", uid);
+//                                    editor.commit();
 
                                     System.out.println("Setting " + uid + " " + loc);
 
                                     Toast.makeText(LoginActivity.this, "Updated shared preferences" + data,
                                             Toast.LENGTH_SHORT).show();
-
-
 
                                     updateUI();
 

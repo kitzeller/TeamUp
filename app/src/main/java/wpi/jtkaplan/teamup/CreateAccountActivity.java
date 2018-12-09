@@ -2,9 +2,7 @@ package wpi.jtkaplan.teamup;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -189,23 +187,16 @@ public class CreateAccountActivity extends AppCompatActivity {
                                 currentUser = user;
 
                                 if (userType.equals("Students")) {
-                                    // Shared Preferences
-                                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(CreateAccountActivity.this);
-                                    SharedPreferences.Editor editor = sp.edit();
-                                    editor.putString("wpi.user.loc", userType);
                                     Student student = new Student(name, null, email, bioEditText.getText().toString());
                                     student.addUIDEmailRef();
-                                    editor.putString("wpi.user.uuid", student.UID);
-                                    editor.commit();
+                                    UserPreferences.write(UserPreferences.LOC_VALUE, userType);
+                                    UserPreferences.write(UserPreferences.UID_VALUE, student.UID);
                                 } else { //Professor
                                     // Shared Preferences
-                                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(CreateAccountActivity.this);
-                                    SharedPreferences.Editor editor = sp.edit();
-                                    editor.putString("wpi.user.loc", userType);
                                     Professor professor = new Professor(name, null, email, bioEditText.getText().toString());
                                     professor.addUIDEmailRef();
-                                    editor.putString("wpi.user.uuid", professor.UID);
-                                    editor.commit();
+                                    UserPreferences.write(UserPreferences.LOC_VALUE, userType);
+                                    UserPreferences.write(UserPreferences.UID_VALUE, professor.UID);
                                 }
 
                                 updateUI();

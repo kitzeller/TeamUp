@@ -19,9 +19,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        uid = preferences.getString("wpi.user.uuid", null);
-        loc = preferences.getString("wpi.user.loc", null);
+        uid = UserPreferences.read(UserPreferences.UID_VALUE,null);
+        loc = UserPreferences.read(UserPreferences.LOC_VALUE,null);
         System.out.println("MainActivity Loading " + uid + " " + loc);
 
 

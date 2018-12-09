@@ -29,6 +29,9 @@ public class ClassesRecyclerViewFragment extends Fragment {
     private User user;
     private ClassesRVAdapter adapter;
 
+    String loc;
+    String uid;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,8 +53,8 @@ public class ClassesRecyclerViewFragment extends Fragment {
         // TODO: Need to get this data from Google Cloud for each user.
         classes = new ArrayList<Class>();
 
-        String uid = UserPreferences.read(UserPreferences.UID_VALUE, null);
-        String loc = UserPreferences.read(UserPreferences.LOC_VALUE, null);
+        uid = UserPreferences.read(UserPreferences.UID_VALUE, null);
+        loc = UserPreferences.read(UserPreferences.LOC_VALUE, null);
 
         User.getUserFromPref(uid, loc, new ValueEventListener() {
             @Override
@@ -86,7 +89,11 @@ public class ClassesRecyclerViewFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 System.out.println("Adding class");
+                System.out.print(dataSnapshot.getValue());
                 wpi.jtkaplan.teamup.model.Class toAdd = dataSnapshot.getValue(wpi.jtkaplan.teamup.model.Class.class);
+                toAdd.UID = uid;
+                toAdd.dbr = wpi.jtkaplan.teamup.model.db.get().child(loc).child(uid);
+
                 adapter.addClass(toAdd);
                 adapter.notifyDataSetChanged();
             }

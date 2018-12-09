@@ -24,7 +24,7 @@ public class Class extends DeclarativeElement {
     private String id;// id is used for the school (ie, the CRN, or BIO3432, etc)
 
     @Exclude
-    private DatabaseReference dbr = null;
+    public DatabaseReference dbr = null;
 
     public Class() {
         super();
@@ -58,9 +58,9 @@ public class Class extends DeclarativeElement {
 
     @Exclude
     private void updateRTDB() {
+        // TODO: Fix multiple database versions of the same class
+
         if (UID != null) {
-            // TODO: Fix multiple database versions of the same class
-            System.out.print("The UID" + UID);
             dbr = db.get().child(this.loc()).child(UID);
             dbr.setValue(this);
         } else if (dbr == null) {
@@ -76,9 +76,11 @@ public class Class extends DeclarativeElement {
         return professorUID;
     }
 
+
+    //TODO: I had to comment out UpdateRTDB as extra classes were being made due to unknown UID
     public void setProfessorUID(String professorUID) {
         this.professorUID = professorUID;
-        updateRTDB();
+        //updateRTDB();
     }
 
     public HashMap<String, Boolean> getMemberUIDs() {
@@ -87,7 +89,7 @@ public class Class extends DeclarativeElement {
 
     public void setMemberUIDs(HashMap<String, Boolean> memberUIDs) {
         this.memberUIDs = memberUIDs;
-        updateRTDB();
+        //updateRTDB();
     }
 
     public HashMap<String, Boolean> getGroupUIDs() {
@@ -96,7 +98,7 @@ public class Class extends DeclarativeElement {
 
     public void setGroupUIDs(HashMap<String, Boolean> groupUIDs) {
         this.groupUIDs = groupUIDs;
-        updateRTDB();
+        //updateRTDB();
     }
 
     public HashMap<String, Boolean> getSkills() {
@@ -105,7 +107,7 @@ public class Class extends DeclarativeElement {
 
     public void setSkills(HashMap<String, Boolean> skills) {
         this.skills = skills;
-        updateRTDB();
+        //updateRTDB();
     }
 
     public String getName() {
@@ -114,7 +116,7 @@ public class Class extends DeclarativeElement {
 
     public void setName(String name) {
         this.name = name;
-        updateRTDB();
+        //updateRTDB();
     }
 
     public String getId() {
@@ -123,7 +125,7 @@ public class Class extends DeclarativeElement {
 
     public void setId(String id) {
         this.id = id;
-        updateRTDB();
+        //updateRTDB();
     }
 
     /**

@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,6 +129,10 @@ public class CreateClassFragment extends Fragment { // TODO :: REFACTOR THE NAME
                         "Class Created: " + classToCreate.getId(),
                         Toast.LENGTH_SHORT
                 ).show();
+
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                ClassesRecyclerViewFragment memberViewFragment = new ClassesRecyclerViewFragment();
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, memberViewFragment).addToBackStack(null).commit();
 
             }
         });

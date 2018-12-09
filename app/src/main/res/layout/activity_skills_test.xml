@@ -28,7 +28,7 @@
         android:layout_height="434dp" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btnSubmitSkills"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

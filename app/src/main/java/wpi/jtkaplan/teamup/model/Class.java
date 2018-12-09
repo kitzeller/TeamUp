@@ -15,13 +15,13 @@ import java.util.HashMap;
  */
 @IgnoreExtraProperties
 public class Class extends DeclarativeElement {
-    String name;
-    String professorUID;
-    HashMap<String, Boolean> memberUIDs = new HashMap<String, Boolean>(); // Members are students that belong to this class. This allows students to quickly/neatly index many skills for many classes
-    HashMap<String, Boolean> groupUIDs = new HashMap<String, Boolean>(); // Groups are collections of members.
-    HashMap<String, Boolean> skills = new HashMap<>(); //skills required for class
+    private String name;
+    private String professorUID;
+    private HashMap<String, Boolean> memberUIDs = new HashMap<String, Boolean>(); // Members are students that belong to this class. This allows students to quickly/neatly index many skills for many classes
+    private HashMap<String, Boolean> groupUIDs = new HashMap<String, Boolean>(); // Groups are collections of members.
+    private HashMap<String, Boolean> skills = new HashMap<>(); //skills required for class
 
-    String id;// id is used for the school (ie, the CRN, or BIO3432, etc)
+    private String id;// id is used for the school (ie, the CRN, or BIO3432, etc)
 
     @Exclude
     private DatabaseReference dbr = null;
@@ -59,6 +59,8 @@ public class Class extends DeclarativeElement {
     @Exclude
     private void updateRTDB() {
         if (UID != null) {
+            // TODO: Fix multiple database versions of the same class
+            System.out.print("The UID" + UID);
             dbr = db.get().child(this.loc()).child(UID);
             dbr.setValue(this);
         } else if (dbr == null) {

@@ -183,6 +183,9 @@ public class ProfileFragment extends Fragment {
         if (loc.equals("Students")){
             textPersonality.setText(user.getPersonality());
             textClasses.setText(Integer.toString(user.getNumClasses()));
+            textGroups.setText(Integer.toString(user.getNumGroups()));
+        } else if (loc.equals("Professors")){
+            textClasses.setText(Integer.toString(user.getNumClasses()));
         }
 
         // Using Picasso API to load image from URL into ImageView

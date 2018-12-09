@@ -3,8 +3,11 @@ package wpi.jtkaplan.teamup;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,6 +33,7 @@ public class SkillsTestActivity extends AppCompatActivity {
     private String classUID;
 
     private TextView skillsTitle;
+    private Button submitSkills;
 
     private Student user;
     private wpi.jtkaplan.teamup.model.Class lecture;
@@ -46,6 +50,7 @@ public class SkillsTestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_skills_test);
 
         skillsTitle = findViewById(R.id.skillsTestTitle);
+        submitSkills = findViewById(R.id.btnSubmitSkills);
 
         String uid = UserPreferences.read(UserPreferences.UID_VALUE,null);
         String loc = UserPreferences.read(UserPreferences.LOC_VALUE,null);
@@ -59,6 +64,9 @@ public class SkillsTestActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             lecture = dataSnapshot.getValue(Class.class);
+                            if (lecture == null){
+                                return;
+                            }
                             skillsTitle.setText(lecture.getName() + " Skills Test");
 
                             member = new Member(user,lecture);
@@ -76,6 +84,23 @@ public class SkillsTestActivity extends AppCompatActivity {
                                     adapter = new SkillAdapter(getBaseContext(), skillsList);
                                     ListView lvSkills = (ListView) findViewById(R.id.question_list);
                                     lvSkills.setAdapter(adapter);
+
+
+                                    // on Submit skills button
+                                    // Add student to class
+                                    submitSkills.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            // on Submit test
+                                            user.addClass(lecture);
+
+                                            Toast.makeText(SkillsTestActivity.this, "Submitted Skills Test" ,
+                                                    Toast.LENGTH_SHORT).show();
+                                            finish();
+
+                                        }
+                                    });
+
                                 }
 
                                 @Override
@@ -97,7 +122,11 @@ public class SkillsTestActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
+
+
+
         });
+
     }
 
 

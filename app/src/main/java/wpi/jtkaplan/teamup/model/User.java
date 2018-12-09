@@ -19,8 +19,8 @@ public abstract class User extends DeclarativeElement {
     private String bio; // TODO bio related stuff
     private HashMap<String, Boolean> classUIDs = new HashMap<String, Boolean>();
 
-    private int numClasses = -1;
-    private int numGroups = -1;
+    private int numClasses = 0;
+    private int numGroups = 0;
 
     @Exclude
     public DatabaseReference dbr = null;
@@ -143,7 +143,9 @@ public abstract class User extends DeclarativeElement {
         if (this instanceof Student) {
             c.addStudent((Student) this);
         }
-        this.numClasses++;
+        if (!classUIDs.containsKey(c.UID)){
+            this.numClasses++;
+        }
         this.classUIDs.put(c.UID, true);
         updateRTDB();
     }

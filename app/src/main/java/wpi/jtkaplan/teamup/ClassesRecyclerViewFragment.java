@@ -57,11 +57,11 @@ public class ClassesRecyclerViewFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (loc.equals("Professors")) {
-                    System.out.println("Professors get class");
                     user = dataSnapshot.getValue(Professor.class);
                     loadClasses();
                 } else if (loc.equals("Students")){
                     user = dataSnapshot.getValue(Student.class);
+                    loadClasses();
                 }
             }
 
@@ -81,7 +81,7 @@ public class ClassesRecyclerViewFragment extends Fragment {
 //        classes.add(new Class("Intro to Games", "IMGD 1001","Mr Baker"));
     }
 
-    private void loadClasses(){
+    public void loadClasses(){
         user.getClassesAsync(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

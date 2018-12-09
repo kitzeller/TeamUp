@@ -54,6 +54,7 @@ public abstract class User extends DeclarativeElement {
         super();
     }
 
+    /*
     @Exclude
     private void updateRTDB() {
         if( UID != null){
@@ -67,7 +68,7 @@ public abstract class User extends DeclarativeElement {
         } else {
             dbr.setValue(this);
         }
-    }
+    }*/
 
     public void addUIDEmailRef() {
         String[] emailSplit = this.email.split("\\.");
@@ -129,10 +130,10 @@ public abstract class User extends DeclarativeElement {
         }
     }
 
-    public void getSingleClassAsync(String classID, ValueEventListener valueEventListener) {
-        DatabaseReference database = db.get().child("Classes");
-        System.out.println("Adding class from User - Class: " + classID);
-        database.child(classID).addListenerForSingleValueEvent(valueEventListener);
+    public static void getSingleClassAsync(String classUID, ValueEventListener valueEventListener) {
+        DatabaseReference database = db.get().child(new Class().loc());
+        System.out.println("Adding class from User - Class: " + classUID);
+        database.child(classUID).addListenerForSingleValueEvent(valueEventListener);
     }
 
     public void addClasses(Collection<? extends Class> classes) {

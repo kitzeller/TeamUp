@@ -1,5 +1,6 @@
 package wpi.jtkaplan.teamup.model;
 
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ValueEventListener;
 
@@ -31,6 +32,26 @@ abstract class RelationalElement
     public final static String getUID(String userUID, String objectUID) {
         return userUID + sep + objectUID;
     }
+
+    @Exclude
+    public DatabaseReference dbr = null;
+
+    @Exclude
+    void updateRTDB() {
+        // TODO: Fix multiple database versions of the same class
+        String UID = this.getUID();
+        if (dbr == null && UID != null) { // if we have a UID, but no reference in the db
+            dbr = db.get().child(this.loc()).child(UID); // get the db reference by UID
+        } else if (dbr == null && UID == null) { // if we have no uid, and no reference in the db
+            dbr = db.get().child(this.loc()).push();// make a new reference and set the UID accordingly
+            UID = dbr.getKey();
+        }
+        if (UID == null && dbr != null) {
+            System.out.print("ERROR IN UPDATERTDB:: ENCOUNTERED A DBR WITHOUT A UID");
+        }
+        dbr.setValue(this);
+    }
+
 
     @Exclude
     public abstract void getAsync(ValueEventListener valueEventListener); // Used to get existing Elements from the database

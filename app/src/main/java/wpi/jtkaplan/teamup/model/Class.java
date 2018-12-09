@@ -2,7 +2,6 @@ package wpi.jtkaplan.teamup.model;
 
 import android.support.annotation.NonNull;
 
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ValueEventListener;
 
@@ -22,8 +21,7 @@ public class Class extends DeclarativeElement {
 
     private String id;// id is used for the school (ie, the CRN, or BIO3432, etc)
 
-    @Exclude
-    public DatabaseReference dbr = null;
+
 
     public Class() {
         super();
@@ -57,28 +55,12 @@ public class Class extends DeclarativeElement {
         this.id = "";
     }
 
-    @Exclude
-    private void updateRTDB() {
-        // TODO: Fix multiple database versions of the same class
-
-        if (dbr == null && UID != null) { // if we have a UID, but no reference in the db
-            dbr = db.get().child(this.loc()).child(UID); // get the db reference by UID
-        } else if (dbr == null && UID == null) { // if we have no uid, and no reference in the db
-            dbr = db.get().child(this.loc()).push();// make a new reference and set the UID accordingly
-            this.UID = dbr.getKey();
-        }
-        if (UID == null && dbr != null) {
-            System.out.print("ERROR IN UPDATERTDB:: ENCOUNTERED A DBR WITHOUT A UID");
-        }
-        dbr.setValue(this);
-    }
 
     public String getProfessorUID() {
         return professorUID;
     }
 
 
-    //TODO: I had to comment out UpdateRTDB as extra classes were being made due to unknown UID
     @Exclude
     public void setProfessorUID(String professorUID) {
         this.professorUID = professorUID;
@@ -146,7 +128,9 @@ public class Class extends DeclarativeElement {
     }
 
     public Member addStudent(Student student) {
-        return new Member(student, this);
+        Member newMember = new Member(student, this);
+        this.memberUIDs.put(newMember.getUID(), true);
+        return newMember;
     }
 
     public void addMembers(Collection<? extends Member> members) {
@@ -170,10 +154,11 @@ public class Class extends DeclarativeElement {
      * NOTE : THIS PERFORMS YOUR ValueEventListener ON EACH CLASS THE STUDENT IS TAKING
      * THIS IS INTENDED TO BE USED WHEN POPULATING
      */
+    /*
     public void getSkillsAsync(ValueEventListener valueEventListener) {
         dbr.child("skills").addListenerForSingleValueEvent(valueEventListener);
     }
-
+    */
     /*public void addSkills(Collection<? extends Skills> skills) {
         for (Skills s : skills) {
             this.addSkill(s);

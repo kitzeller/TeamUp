@@ -32,7 +32,7 @@ public class Member extends RelationalElement<Student, Class> {
         super(s, c);
         updateRTDB();
     }
-
+    /*
     @Exclude
     private void updateRTDB() {
         if (dbr == null) {
@@ -41,7 +41,7 @@ public class Member extends RelationalElement<Student, Class> {
         } else {
             dbr.setValue(this);
         }
-    }
+    }*/
 
     @Override
     final String loc() {

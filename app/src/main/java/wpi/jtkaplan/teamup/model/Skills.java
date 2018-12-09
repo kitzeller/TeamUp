@@ -50,15 +50,6 @@ public class Skills extends RelationalElement<Student, Class> {
         child.addListenerForSingleValueEvent(valueEventListener);
     }
 
-    @Exclude
-    private void updateRTDB() {
-        if (dbr == null) {
-            dbr = db.get().child(this.loc()).child(this.getUID());
-            dbr.setValue(this);
-        } else {
-            dbr.setValue(this);
-        }
-    }
 
     public void addSkill(String skill, Integer skillLevel) {
         this.skills.put(skill, skillLevel);
@@ -74,7 +65,9 @@ public class Skills extends RelationalElement<Student, Class> {
         return skills;
     }
 
+    @Exclude
     public void setSkills(HashMap<String, Integer> skills) {
         this.skills = skills;
+        updateRTDB();
     }
 }

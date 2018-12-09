@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -51,18 +52,35 @@ public class SkillAdapter extends BaseAdapter {
         }
 
         //get current item to be displayed
-        final String currentSkill = (String) getItem(position);
+        final String currentSkill = getItem(position);
 
         //sets the text for item name
         viewHolder.skillName.setText(currentSkill);
 
-        viewHolder.levelChoices.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final int level = viewHolder.levelChoices.getCheckedRadioButtonId();
-                    //TODO call addSkill function on user to set skill with skillLevel
-                    Skills skillsObj = UserPreferences.getSkillsObj();
-                    skillsObj.addSkill(currentSkill, level);
+        //idLookup.put(convertView.findViewById(R.id.one, 1)
+        viewHolder.levelChoices.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int radioID = group.getCheckedRadioButtonId();
+                int level = -1;
+                /*
+                switch(radioID){
+                    case R.id.one:
+                        level = 1; break;
+                    case R.id.two:
+                        level = 2; break;
+                    case R.id.three:
+                        level = 3; break;
+                    case R.id.four:
+                        level = 4; break;
+                    case R.id.five:
+                        level = 5; break;
+                }*/
+                level = Integer.valueOf(((RadioButton) (viewHolder.view.findViewById(radioID))).getText().toString());
+                //TODO call addSkill function on user to set skill with skillLevel
+                System.out.println("I'm clicked " + level);
+                Skills skillsObj = UserPreferences.getSkillsObj();
+                skillsObj.addSkill(currentSkill, level);
                 }
             });
 
@@ -73,10 +91,12 @@ public class SkillAdapter extends BaseAdapter {
     private class ViewHolder {
         TextView skillName;
         RadioGroup levelChoices;
+        View view;
 
         public ViewHolder(View view) {
-            skillName = (TextView) view.findViewById(R.id.txtSkills);
-            levelChoices = (RadioGroup) view.findViewById(R.id.choices);
+            this.view = view;
+            skillName = view.findViewById(R.id.txtSkills);
+            levelChoices = view.findViewById(R.id.choices);
         }
     }
 

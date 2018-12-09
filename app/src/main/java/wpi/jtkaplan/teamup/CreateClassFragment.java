@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * Class for creating a class
  */
 
-public class ClassFragment extends Fragment { // TODO :: REFACTOR THE NAME FOR CLASSFRAGMENT -- THIS IS MISLEADING?
+public class CreateClassFragment extends Fragment { // TODO :: REFACTOR THE NAME FOR CLASSFRAGMENT -- THIS IS MISLEADING?
 
     private ArrayList<String> tags;
 

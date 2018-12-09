@@ -1,6 +1,8 @@
 package wpi.jtkaplan.teamup;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -9,10 +11,19 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
+    private String loc;
+    private String uid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        uid = preferences.getString("wpi.user.uuid", null);
+        loc = preferences.getString("wpi.user.loc", null);
+        System.out.println("MainActivity Loading " + uid + " " + loc);
+
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
@@ -23,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 //                    new HomeFragment()).commit();
 
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new ClassFragment()).commit();
+                    new ProfileFragment()).commit();
         }
     }
 
@@ -36,14 +47,18 @@ public class MainActivity extends AppCompatActivity {
 
                     // Select Fragments based on which tab is selected
                     switch (item.getItemId()) {
-                        case R.id.nav_home:
-                            //selectedFragment = new HomeFragment();
-                            // TODO: Add funtionality for different home screen depending on if Profesor or Student
-                            // todo: let's discuss the above point -- might not need to do this.
-                            selectedFragment = new ClassFragment();
-                            break;
-                        case R.id.nav_favorites:
-                            selectedFragment = new ClassesRecyclerViewFragment();
+//                        case R.id.nav_home:
+//                            //selectedFragment = new HomeFragment();
+//                            // TODO: Add funtionality for different home screen depending on if Profesor or Student
+//                            // todo: let's discuss the above point -- might not need to do this.
+//                            selectedFragment = new CreateClassFragment();
+//                            break;
+                        case R.id.nav_groups:
+                            if (loc.equals("Students")){
+                                selectedFragment = new ClassesRecyclerViewFragment();
+                            } else {
+                                selectedFragment = new ClassesRecyclerViewFragment();
+                            }
                             break;
                         case R.id.nav_profile:
                             selectedFragment = new ProfileFragment();

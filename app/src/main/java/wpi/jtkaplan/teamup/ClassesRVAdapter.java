@@ -57,12 +57,12 @@ public class ClassesRVAdapter extends RecyclerView.Adapter<ClassesRVAdapter.Clas
                     toast.show();
                     AppCompatActivity activity = (AppCompatActivity) view.getContext();
 
-                    if (UserPreferences.read(UserPreferences.LOC_VALUE,null).equals("Students")){
+                    if (UserPreferences.read(UserPreferences.LOC_VALUE,null).equals(UserPreferences.STUDENT)){
                         System.out.println("Students");
                         AddClassFragment myFragment = new AddClassFragment();
                         activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, myFragment).addToBackStack(null).commit();
 
-                    } else if (UserPreferences.read(UserPreferences.LOC_VALUE,null).equals("Professors")){
+                    } else if (UserPreferences.read(UserPreferences.LOC_VALUE,null).equals(UserPreferences.PROFESSOR)){
                         System.out.println("Professors");
                         CreateClassFragment myFragment = new CreateClassFragment();
                         activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, myFragment).addToBackStack(null).commit();

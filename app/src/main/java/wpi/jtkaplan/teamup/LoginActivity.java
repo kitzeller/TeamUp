@@ -304,7 +304,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         User.getUserFromPref(UserPreferences.read(UserPreferences.UID_VALUE, null), UserPreferences.read(UserPreferences.LOC_VALUE, null), new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (UserPreferences.read(UserPreferences.LOC_VALUE, null).equals("Professors")){
+                if (UserPreferences.read(UserPreferences.LOC_VALUE, null).equals(UserPreferences.PROFESSOR)){
                     UserPreferences.setCurrentUser(dataSnapshot.getValue(Professor.class));
                 } else {
                     UserPreferences.setCurrentUser(dataSnapshot.getValue(Student.class));

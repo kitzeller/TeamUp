@@ -136,6 +136,11 @@ public class Class extends DeclarativeElement {
 
     }
 
+    public void getGroupsListAsync(ValueEventListener valueEventListener) {
+        DatabaseReference database = db.get().child(this.loc());
+        database.child(this.UID).child("groupUIDs").addListenerForSingleValueEvent(valueEventListener);
+    }
+
     public Member addStudent(Student student) {
         Member newMember = new Member(student, this);
         this.memberUIDs.put(newMember.getUID(), true);

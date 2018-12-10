@@ -80,4 +80,12 @@ public class UserPreferences {
     public static void setCurrentUser(User currentUser) {
         UserPreferences.currentUser = currentUser;
     }
+
+    public static Group getCurrentGroup() {
+        return currentGroup;
+    }
+
+    public static void setCurrentGroup(Group currentGroup) {
+        UserPreferences.currentGroup = currentGroup;
+    }
 }

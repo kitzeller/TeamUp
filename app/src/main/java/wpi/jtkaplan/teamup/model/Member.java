@@ -4,6 +4,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+
 /**
  * Member model
  */
@@ -16,8 +18,12 @@ public class Member extends RelationalElement<Student, Class> {
      * For our case, a member is a student which "uses" (read: is a member of) a class
      * */
 
-    public boolean isInGroup;
-    // TODO : Implement finding out whether this member is in a group or not
+    public String groupID;
+
+    // ID of other members I have rated to rating
+    private HashMap<String, Integer> ratingsOutward;
+
+    //TODO : Implement finding out whether this member is in a group or not
     //TODO : implement a rating system within the model
 
     @Exclude
@@ -69,6 +75,11 @@ public class Member extends RelationalElement<Student, Class> {
     public void getSkillsAsync(ValueEventListener valueEventListener) {
         DatabaseReference child = db.get().child(new Skills().loc()).child(this.getUID());
         child.addListenerForSingleValueEvent(valueEventListener);
+    }
+
+    public void addMemberRating(String uid, int value){
+        this.ratingsOutward.put(uid, value);
+        updateRTDB();
     }
 
 

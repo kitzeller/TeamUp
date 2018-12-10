@@ -319,8 +319,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         // If success call MainActivity class
         Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
-        //myIntent.putExtra("email", currentUser.getEmail()); //Optional parameters
-
         LoginActivity.this.startActivity(myIntent);
     }
 
@@ -347,15 +345,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                     UserPreferences.write(UserPreferences.LOC_VALUE, loc);
                                     UserPreferences.write(UserPreferences.UID_VALUE, uid);
 
-//                                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-//                                    SharedPreferences.Editor editor = sp.edit();
-//                                    editor.putString("wpi.user.loc", loc);
-//                                    editor.putString("wpi.user.uuid", uid);
-//                                    editor.commit();
                                     wpi.jtkaplan.teamup.model.db.preload(loc, uid);
-
                                     System.out.println("Setting " + uid + " " + loc);
-
                                     updateUI();
 
                                 }

@@ -54,6 +54,7 @@ public class HomeFragment extends Fragment {
             // If Professor
             SectionsPageAdapter adapter = new SectionsPageAdapter(getChildFragmentManager());
             adapter.addFragment(new StudentsRecyclerViewFragment(), "Students");
+            adapter.addFragment(new ClassGroupsRecyclerViewFragment(), "Groups");
             viewPager.setAdapter(adapter);
         }
     }

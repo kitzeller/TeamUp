@@ -73,15 +73,6 @@ public class ClassesRecyclerViewFragment extends Fragment {
 
             }
         });
-
-
-
-//        Class democlass = new Class("Intro to Psy", "PSY 1402", "Mr Wilson");
-//        new Student("test", "test", "test").addClass(democlass);
-//        classes.add(democlass);
-//        classes.add(new Class("Intro to Computing", "CS 4518","Tian Guo"));
-//        classes.add(new Class("Fun and Games", "FUN 101","Mr Jake"));
-//        classes.add(new Class("Intro to Games", "IMGD 1001","Mr Baker"));
     }
 
     public void loadClasses(){
@@ -91,9 +82,6 @@ public class ClassesRecyclerViewFragment extends Fragment {
                 System.out.println("Adding class");
                 System.out.print(dataSnapshot.getValue());
                 wpi.jtkaplan.teamup.model.Class toAdd = dataSnapshot.getValue(wpi.jtkaplan.teamup.model.Class.class);
-                //toAdd.UID = uid;
-                //toAdd.dbr = wpi.jtkaplan.teamup.model.db.get().child(loc).child(uid);
-
                 adapter.addClass(toAdd);
                 adapter.notifyDataSetChanged();
             }

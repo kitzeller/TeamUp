@@ -17,7 +17,7 @@ import wpi.jtkaplan.teamup.model.Class;
 public class ClassesRVAdapter extends RecyclerView.Adapter<ClassesRVAdapter.ClassViewHolder> {
 
     // Dummmy class (doesn't get added to db)
-    private Class addClassClass = new Class("Add A New Class!");
+    private final static Class addClassClass = new Class("Add A New Class!");
 
     List<Class> classes;
 

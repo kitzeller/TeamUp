@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import wpi.jtkaplan.teamup.model.Class;
 import wpi.jtkaplan.teamup.model.Member;
 import wpi.jtkaplan.teamup.model.Skills;
 
@@ -15,6 +16,8 @@ public class UserPreferences {
 
     private static Member member;
     private static Skills skillsObj;
+    private static Class selectedClass;
+
 
     private static SharedPreferences mSharedPref;
     public static final String UID_VALUE = "wpi.user.uuid";
@@ -54,5 +57,13 @@ public class UserPreferences {
 
     public static void setSkillsObj(Skills skillsObj) {
         UserPreferences.skillsObj = skillsObj;
+    }
+
+    public static Class getSelectedClass() {
+        return selectedClass;
+    }
+
+    public static void setSelectedClass(Class selectedClass) {
+        UserPreferences.selectedClass = selectedClass;
     }
 }

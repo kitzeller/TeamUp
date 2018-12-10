@@ -50,13 +50,13 @@ public class Member extends RelationalElement<Student, Class> {
 
     @Override
     public void getAsync(String uid, ValueEventListener valueEventListener) {
-        DatabaseReference child = db.get().child(this.getUID()).child(uid);
+        DatabaseReference child = db.get().child(this.loc()).child(uid);
         child.addListenerForSingleValueEvent(valueEventListener);
     }
 
     @Override
     public void getAsync(ValueEventListener valueEventListener) {
-        DatabaseReference child = db.get().child(this.getUID()).child(this.getUID());
+        DatabaseReference child = db.get().child(this.loc()).child(this.getUID());
         child.addListenerForSingleValueEvent(valueEventListener);
     }
 

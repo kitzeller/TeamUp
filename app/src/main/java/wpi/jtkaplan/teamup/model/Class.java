@@ -2,6 +2,7 @@ package wpi.jtkaplan.teamup.model;
 
 import android.support.annotation.NonNull;
 
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ValueEventListener;
 
@@ -20,7 +21,6 @@ public class Class extends DeclarativeElement {
     private HashMap<String, Boolean> skills = new HashMap<>(); //skills required for class
 
     private String id;// id is used for the school (ie, the CRN, or BIO3432, etc)
-
 
 
     public Class() {
@@ -123,13 +123,24 @@ public class Class extends DeclarativeElement {
      */
     public void getMembersAsync(ValueEventListener valueEventListener) {
         for (String c : memberUIDs.keySet()) {
-            dbr.child(this.loc()).child(c).addListenerForSingleValueEvent(valueEventListener);
+            //dbr.child(this.loc()).child(c).addListenerForSingleValueEvent(valueEventListener);
+            dbr.child(new Member().loc()).child(c).addListenerForSingleValueEvent(valueEventListener);
         }
+    }
+
+    public void getMembersListAsync(ValueEventListener valueEventListener) {
+        //dbr.child(this.loc()).child(c).addListenerForSingleValueEvent(valueEventListener);
+        DatabaseReference database = db.get().child("Classes");
+        System.out.println("classUID " +UID);
+        database.child(this.UID).child("memberUIDs").addListenerForSingleValueEvent(valueEventListener);
+
     }
 
     public Member addStudent(Student student) {
         Member newMember = new Member(student, this);
         this.memberUIDs.put(newMember.getUID(), true);
+        updateRTDB();
+
         return newMember;
     }
 
@@ -165,7 +176,6 @@ public class Class extends DeclarativeElement {
         }
 
     }*/
-
     public void addSkill(String s) {
         this.skills.put(s, true);
         updateRTDB();

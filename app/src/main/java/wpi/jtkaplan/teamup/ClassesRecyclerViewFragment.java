@@ -91,8 +91,8 @@ public class ClassesRecyclerViewFragment extends Fragment {
                 System.out.println("Adding class");
                 System.out.print(dataSnapshot.getValue());
                 wpi.jtkaplan.teamup.model.Class toAdd = dataSnapshot.getValue(wpi.jtkaplan.teamup.model.Class.class);
-                toAdd.UID = uid;
-                toAdd.dbr = wpi.jtkaplan.teamup.model.db.get().child(loc).child(uid);
+                //toAdd.UID = uid;
+                //toAdd.dbr = wpi.jtkaplan.teamup.model.db.get().child(loc).child(uid);
 
                 adapter.addClass(toAdd);
                 adapter.notifyDataSetChanged();

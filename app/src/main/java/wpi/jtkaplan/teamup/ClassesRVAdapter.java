@@ -30,6 +30,7 @@ public class ClassesRVAdapter extends RecyclerView.Adapter<ClassesRVAdapter.Clas
     public void onBindViewHolder(@NonNull ClassViewHolder classViewHolder, int i) {
         classViewHolder.className.setText(classes.get(i).getName());
         classViewHolder.classID.setText(classes.get(i).getId());
+        classViewHolder.setClassObject(classes.get(i));
 
         // i refers to class index in classes list
         //System.out.println(i);
@@ -96,6 +97,7 @@ public class ClassesRVAdapter extends RecyclerView.Adapter<ClassesRVAdapter.Clas
         CardView cv;
         TextView className;
         TextView classID;
+        Class classObject;
 
         ClassViewHolder(View itemView) {
             super(itemView);
@@ -108,12 +110,14 @@ public class ClassesRVAdapter extends RecyclerView.Adapter<ClassesRVAdapter.Clas
                 @Override
                 public void onClick(View view) {
 
-
                     Toast toast = Toast.makeText(view.getContext(),
                             "You clicked class " + classID.getText(),
                             Toast.LENGTH_SHORT);
 
                     toast.show();
+
+                    // Set selected Class
+                    UserPreferences.setSelectedClass(classObject);
 
                     AppCompatActivity activity = (AppCompatActivity) view.getContext();
                     GroupRecyclerViewFragment memberViewFragment = new GroupRecyclerViewFragment();
@@ -125,6 +129,14 @@ public class ClassesRVAdapter extends RecyclerView.Adapter<ClassesRVAdapter.Clas
 
         public void setColor(int c) {
             cv.setCardBackgroundColor(cv.getResources().getColor(c));
+        }
+
+        public Class getClassObject() {
+            return classObject;
+        }
+
+        public void setClassObject(Class classObject) {
+            this.classObject = classObject;
         }
     }
 

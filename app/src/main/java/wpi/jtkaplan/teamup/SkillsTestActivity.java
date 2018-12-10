@@ -61,10 +61,10 @@ public class SkillsTestActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             // TODO :: Check if dataSnapshot.getValue() is null -- if it is, then return early and tell the user that the class string they entered is invalid!!
-                            System.out.println("datasnap: " + dataSnapshot.getValue());
+                            //System.out.println("datasnap: " + dataSnapshot.getValue());
 
                             lecture = dataSnapshot.getValue(Class.class);
-                            System.out.println("Skills: " + lecture.getName());
+                            //System.out.println("Skills: " + lecture.getName());
                             System.out.println("NUMBER OF SKILLS CURRENTLY LOADED IN CLASS: " + Integer.toString(lecture.getSkills().keySet().size()));
 
                             skillsTitle.setText(lecture.getName() + " Skills Test");
@@ -73,7 +73,7 @@ public class SkillsTestActivity extends AppCompatActivity {
                             lecture.UID = classUID;
                             lecture.dbr = wpi.jtkaplan.teamup.model.db.get().child(lecture.loc()).child(classUID);
 
-                            member = new Member(user,lecture);
+                            //member = new Member(user,lecture);
 
                             // TODO: Pass Skills object to list adapter - using User Pref Singleton?
                             skillsObj = new Skills(user,lecture);

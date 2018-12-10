@@ -73,7 +73,7 @@ public abstract class User extends DeclarativeElement {
     public void addUIDEmailRef() {
         String[] emailSplit = this.email.split("\\.");
         String email = String.join("", emailSplit);
-        System.out.println("Email " + email);
+        //System.out.println("Email " + email);
         DatabaseReference database = db.get().child("E2U").child(email);
         database.setValue(this.UID + ":::" + this.loc());
     }
@@ -125,14 +125,14 @@ public abstract class User extends DeclarativeElement {
         DatabaseReference database = db.get().child("Classes");
 
         for (String c : classUIDs.keySet()) {
-            System.out.println("Adding class from User - Class: " + c);
+            //System.out.println("Adding class from User - Class: " + c);
             database.child(c).addListenerForSingleValueEvent(valueEventListener);
         }
     }
 
     public static void getSingleClassAsync(String classUID, ValueEventListener valueEventListener) {
         DatabaseReference database = db.get().child(new Class().loc());
-        System.out.println("Adding class from User - Class: " + classUID);
+        //System.out.println("Adding class from User - Class: " + classUID);
         database.child(classUID).addListenerForSingleValueEvent(valueEventListener);
     }
 

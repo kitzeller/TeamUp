@@ -44,6 +44,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import wpi.jtkaplan.teamup.model.Professor;
+import wpi.jtkaplan.teamup.model.Student;
 import wpi.jtkaplan.teamup.model.User;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -63,6 +65,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private AnimationDrawable anim;
+
+    private String uid;
+    private String loc;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -296,6 +301,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private void updateUI() {
+        User.getUserFromPref(UserPreferences.read(UserPreferences.UID_VALUE, null), UserPreferences.read(UserPreferences.LOC_VALUE, null), new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (UserPreferences.read(UserPreferences.LOC_VALUE, null).equals("Professors")){
+                    UserPreferences.setCurrentUser(dataSnapshot.getValue(Professor.class));
+                } else {
+                    UserPreferences.setCurrentUser(dataSnapshot.getValue(Student.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         // If success call MainActivity class
         Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
         //myIntent.putExtra("email", currentUser.getEmail()); //Optional parameters
@@ -319,8 +340,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     String data = (String) dataSnapshot.getValue();
                                     String[] values = data.split("\\:\\:\\:");
-                                    String uid = values[0];
-                                    String loc = values[1];
+                                    uid = values[0];
+                                    loc = values[1];
 
                                     // Shared Preferences
                                     UserPreferences.write(UserPreferences.LOC_VALUE, loc);
@@ -334,9 +355,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                     wpi.jtkaplan.teamup.model.db.preload(loc, uid);
 
                                     System.out.println("Setting " + uid + " " + loc);
-
-                                    Toast.makeText(LoginActivity.this, "Updated shared preferences" + data,
-                                            Toast.LENGTH_SHORT).show();
 
                                     updateUI();
 

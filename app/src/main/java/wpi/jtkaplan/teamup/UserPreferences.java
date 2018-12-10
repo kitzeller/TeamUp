@@ -5,8 +5,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import wpi.jtkaplan.teamup.model.Class;
+import wpi.jtkaplan.teamup.model.Group;
 import wpi.jtkaplan.teamup.model.Member;
 import wpi.jtkaplan.teamup.model.Skills;
+import wpi.jtkaplan.teamup.model.User;
 
 /**
  * Created by mac on 12/8/18.
@@ -17,11 +19,15 @@ public class UserPreferences {
     private static Member member;
     private static Skills skillsObj;
     private static Class selectedClass;
+    private static User currentUser;
+    private static Group currentGroup;
 
 
     private static SharedPreferences mSharedPref;
     public static final String UID_VALUE = "wpi.user.uuid";
     public static final String LOC_VALUE = "wpi.user.loc";
+    public static final String PROFESSOR = "Professors";
+    public static final String STUDENT = "Students";
 
     private UserPreferences() {
 
@@ -65,5 +71,13 @@ public class UserPreferences {
 
     public static void setSelectedClass(Class selectedClass) {
         UserPreferences.selectedClass = selectedClass;
+    }
+
+    public static User getCurrentUser() {
+        return currentUser;
+    }
+
+    public static void setCurrentUser(User currentUser) {
+        UserPreferences.currentUser = currentUser;
     }
 }

@@ -17,6 +17,7 @@ public abstract class User extends DeclarativeElement {
     private String personality;
     private String email;
     private String bio; // TODO bio related stuff
+    private String photo;
     private HashMap<String, Boolean> classUIDs = new HashMap<String, Boolean>();
 
     private int numClasses = 0;
@@ -114,6 +115,15 @@ public abstract class User extends DeclarativeElement {
 
     public void setEmail(String email) {
         this.email = email;
+        updateRTDB();
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
         updateRTDB();
     }
 

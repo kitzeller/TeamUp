@@ -19,6 +19,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -133,18 +134,21 @@ public class ProfileFragment extends Fragment {
                 //Creating the instance of PopupMenu
                 PopupMenu popup = new PopupMenu(getActivity(), btnEdit);
                 //Inflating the Popup using xml file
-                popup.getMenuInflater()
-                        .inflate(R.menu.popup_menu, popup.getMenu());
+                popup.getMenu().add(Menu.NONE, 1, 1, "Edit Bio");
+                if (loc.equals(UserPreferences.STUDENT)) {
+                    popup.getMenu().add(Menu.NONE, 2, 2, "Edit Myers Briggs");
+                    popup.getMenu().add(Menu.NONE, 3, 3, "Open Myers Briggs Test");
+                }
 
                 //registering popup with OnMenuItemClickListener
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getItemId() == R.id.one) {
+                        if (item.getItemId() == 1) {
                             textBio.setEnabled(true);
                             textBio.requestFocus();
-                        } else if (item.getItemId() == R.id.two) {
+                        } else if (item.getItemId() == 2) {
                             editMyersBriggs();
-                        } else if (item.getItemId() == R.id.three){
+                        } else if (item.getItemId() == 3){
                             openMyersBriggs();
                         }
                         Toast.makeText(
@@ -269,6 +273,8 @@ public class ProfileFragment extends Fragment {
                         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                 .setPhotoUri(downloadUrl)
                                 .build();
+
+                        user.setPhoto(downloadUrl.toString());
 
                         mUser.updateProfile(profileUpdates);
                         Picasso.get().load(downloadUrl).transform(new PicassoCircleTransformation())

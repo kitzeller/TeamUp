@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,12 +36,15 @@ public class GroupRecyclerViewFragment
 
     private GroupRVAdapter adapter;
 
+    private TextView txtNoGroup;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
 
         rv = view.findViewById(R.id.rv);
+        txtNoGroup = view.findViewById(R.id.txtNoGroup);
         LinearLayoutManager llm = new LinearLayoutManager(this.getActivity());
         rv.setLayoutManager(llm);
         rv.setHasFixedSize(true);
@@ -56,36 +61,22 @@ public class GroupRecyclerViewFragment
         members = new ArrayList<>();
         // if professor get all students
         Class selected = UserPreferences.getSelectedClass();
-        System.out.println("Selected Class " + selected.getName());
+        String O_UID = selected.UID;
+        User student = UserPreferences.getCurrentUser();
+        String S_UID = student.UID;
 
-        selected.getMembersListAsync(new ValueEventListener() {
+        String memberUID = S_UID + ":" + O_UID;
+
+        Member.getAsyncMember(memberUID, new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Gets list of member uid, then split by ':' character and get student objects from ID
-                System.out.println("List " + dataSnapshot.getValue());
-                HashMap<String,Boolean> memberMap = (HashMap<String,Boolean>)dataSnapshot.getValue();
-                for (String key: memberMap.keySet()){
-                    String[] values = key.split("\\:");
-                    String studentUID = values[0];
-                    String classUID = values[1];
-                    System.out.println("SUID " + studentUID);
+                Member m = dataSnapshot.getValue(Member.class);
+                if (m.isInGroup){
 
-                    User.getUserFromPref(studentUID, "Students", new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            // TODO: Right now shows all students for Professor View and Student view - change for only professors and then groups for students
-                            members.add(dataSnapshot.getValue(Student.class));
-                            adapter.notifyDataSetChanged();
-                        }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
+                } else {
+                    txtNoGroup.setText("Group has not been created.");
                 }
-
-
             }
 
             @Override
@@ -94,10 +85,34 @@ public class GroupRecyclerViewFragment
             }
         });
 
-//        selected.getMembersAsync(new ValueEventListener() {
+
+//        selected.getMembersListAsync(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(DataSnapshot dataSnapshot) {
-//                Member m = dataSnapshot.getValue(Member.class);
+//                // Gets list of member uid, then split by ':' character and get student objects from ID
+//                System.out.println("List " + dataSnapshot.getValue());
+//                HashMap<String,Boolean> memberMap = (HashMap<String,Boolean>)dataSnapshot.getValue();
+//                for (String key: memberMap.keySet()){
+//                    String[] values = key.split("\\:");
+//                    String studentUID = values[0];
+//                    String classUID = values[1];
+//                    System.out.println("SUID " + studentUID);
+//
+//                    User.getUserFromPref(studentUID, "Students", new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                            // TODO: Right now shows all students for Professor View and Student view - change for only professors and then groups for students
+//                            members.add(dataSnapshot.getValue(Student.class));
+//                            adapter.notifyDataSetChanged();
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError) {
+//
+//                        }
+//                    });
+//                }
+//
 //
 //            }
 //
@@ -107,16 +122,6 @@ public class GroupRecyclerViewFragment
 //            }
 //        });
 
-
-
-
-
-//        members.add(new Professor("DIFFERENT MODEL", "x", "x"));
-//        members.add(new Student("Harvey Milk", "21", "im@straight.com"));
-//        members.add(new Student("Frida Kahlo", "32", "nothurt@faithful.com"));
-//        members.add(new Student("Edward Culkin", "8", "wheredid@gowrong.com"));
-//        members.add(new Student("John Adams", "15", "emaildoesnt@exist.yet"));
-//        members.add(new Student("Abraham Lincoln", "209", "dont@shootme.bro"));
     }
 
     private void initializeAdapter() {

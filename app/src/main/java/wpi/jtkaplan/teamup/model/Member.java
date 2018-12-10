@@ -16,7 +16,8 @@ public class Member extends RelationalElement<Student, Class> {
      * For our case, a member is a student which "uses" (read: is a member of) a class
      * */
 
-    public boolean isInGroup; // TODO : Implement finding out whether this member is in a group or not
+    public boolean isInGroup;
+    // TODO : Implement finding out whether this member is in a group or not
     //TODO : implement a rating system within the model
 
     @Exclude
@@ -51,6 +52,11 @@ public class Member extends RelationalElement<Student, Class> {
     @Override
     public void getAsync(String uid, ValueEventListener valueEventListener) {
         DatabaseReference child = db.get().child(this.loc()).child(uid);
+        child.addListenerForSingleValueEvent(valueEventListener);
+    }
+
+    public static void getAsyncMember(String uid, ValueEventListener valueEventListener) {
+        DatabaseReference child = db.get().child("Members").child(uid);
         child.addListenerForSingleValueEvent(valueEventListener);
     }
 

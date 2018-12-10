@@ -120,8 +120,9 @@ public class ClassesRVAdapter extends RecyclerView.Adapter<ClassesRVAdapter.Clas
                     UserPreferences.setSelectedClass(classObject);
 
                     AppCompatActivity activity = (AppCompatActivity) view.getContext();
-                    GroupRecyclerViewFragment memberViewFragment = new GroupRecyclerViewFragment();
-                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, memberViewFragment).addToBackStack(null).commit();
+                    //GroupRecyclerViewFragment memberViewFragment = new GroupRecyclerViewFragment();
+                    HomeFragment homeFrag = new HomeFragment();
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFrag).addToBackStack(null).commit();
 
                 }
             });

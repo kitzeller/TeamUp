@@ -10,13 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +22,6 @@ import java.util.List;
 import wpi.jtkaplan.teamup.model.Class;
 import wpi.jtkaplan.teamup.model.Group;
 import wpi.jtkaplan.teamup.model.Member;
-import wpi.jtkaplan.teamup.model.Professor;
 import wpi.jtkaplan.teamup.model.Student;
 import wpi.jtkaplan.teamup.model.User;
 
@@ -73,9 +70,9 @@ public class GroupRecyclerViewFragment
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Member m = dataSnapshot.getValue(Member.class);
-                if (m.groupID != null){
+                if (m.groupUID != null) {
                     // TODO: Get group members
-                    Group.getGroupMembersListAsync(m.groupID, new ValueEventListener() {
+                    Group.getGroupMembersListAsync(m.groupUID, new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             HashMap<String, Boolean> memberMap = (HashMap<String, Boolean>) dataSnapshot.getValue();

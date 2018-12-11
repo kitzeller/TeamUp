@@ -7,7 +7,15 @@ import time
 
 from keras.models import Sequential
 from keras.layers import Dense, Activation
-from keras import losses
+from keras import losses, optimizers
+
+from firebase import firebase
+
+from flask import Flask, request
+
+app = Flask(__name__)
+
+rtdb = firebase.FirebaseApplication("https://teamup-224504.firebaseio.com", None)
 
 """
 Our firebase data is in the form of
@@ -31,7 +39,10 @@ def norm(x, min=1, max=5):
 def getPersonalityCompat(A,B):
     """returns a compatibility ranking [1,5],
     based on how well the two personality types interact"""
-    return MB.table[A.upper()][B.upper()]
+    try:
+        return MB.table[A.upper()][B.upper()]
+    except KeyError:
+        return 2;
 
 def makeData(membersDict):
     # TODO : keep this or not?
@@ -99,7 +110,7 @@ NOTE : We generate a new model for each class, for multiple reasons:
 
 """
 
-def makeModel(studentSkillsCount, lr=0.025):
+def makeModel(studentSkillsCount, lr=0.05):
     n = studentSkillsCount + 1 # n is the row size (the number of skills + one, because we also include the personality compatibility.)
     model = Sequential()
     model.add(Dense(n*2, input_shape=(n*2,), kernel_initializer="he_normal"))
@@ -111,18 +122,96 @@ def makeModel(studentSkillsCount, lr=0.025):
     model.compile(optimizer=sgd, loss=losses.mean_squared_error)
     return model
 
-skills = ["CS", "More CS"]*10
-model = makeModel(len(skills))
-data = genData(skills, n=10000)
-
-sttime = time.time()
-history = model.fit(data[0],data[1])
-print("Training the model took: "+ str(time.time()-sttime))
-
-#print(history.history)
-
-print(model.predict(np.array([[5, *([1]*len(skills)),5, *([5]*len(skills))]])))
-## TODO : actually attaching the model to the rest of the application
-## TODO : convert the json into a proper database (to make the data quickly queryable)
-## TODO : save the model?
 ## TODO : USE 8 BIT INTEGERS
+
+def isPaired(pairings, person):
+    for pairing in pairings:
+        if person in pairing:
+            return True
+    return False
+
+gpc = getPersonalityCompat
+def pair(A, B):
+    return np.array([[gpc(A[2],B[2]), *A[1], gpc(B[2],A[2]), *B[1]]])
+
+def makePairings(dbdata):
+    skills = list(dbdata[0][1].keys())
+    skills.remove("personality")
+    students = []
+    for datum in dbdata:
+        uid = datum[0]
+        skillvector = []
+        for skill in skills:
+            skillvector.append(datum[1][skill])
+
+        students.append([uid, skillvector, datum[1]["personality"]])
+
+        
+    model = makeModel(len(skills))
+    training_data = genData(skills, n=10000)
+
+    sttime = time.time()
+    history = model.fit(training_data[0],training_data[1], epochs=10, batch_size=32)
+    print("Training the model took: "+ str(time.time()-sttime))
+
+    matches = dict(map(lambda x:(x[0],[]),students))
+    for personA in students:
+        best_match = max(map(lambda personX: [model.predict(pair(personA, personX))[0][0],personA[0],personX[0]], [student for student in students if student[0] != personA[0]]), key=lambda _:_[0])
+        matches[best_match[1]].append(best_match[2])
+        matches[best_match[2]].append(best_match[1])
+
+        students[:] = [student for student in students if not matches[student[0]]]
+        
+    #at this point, matches is a dictionary containing mappings from one student to another, s.t. each mapping is the best possible pairing
+    return matches
+
+
+def groupsFromMatches(matches):
+    allmatches = list(matches.keys())
+    groups = []
+    for match in allmatches:
+        groups.append({})
+        current_group = [match, *matches[match]]
+        for mem in current_group:
+            groups[-1][mem] = True
+        allmatches[:] = [m for m in allmatches if (not current_group.count(m))]
+        
+    return groups
+
+
+@app.route("/", methods=["POST", "GET"])
+def makeGroup(classUID):
+    #classUID = request.arg.get("ClassUID", type=str)
+
+    clss = rtdb.get("/Classes", classUID)
+
+    dbdata = []
+
+    #load all of the data for the current class
+    for memberUID in clss["memberUIDs"].keys():
+        memberSkills = rtdb.get("/Skills", memberUID)
+        myersbrigs = rtdb.get("/Students/"+memberUID.split(":")[0],"personality")
+        dbdata.append([memberUID,memberSkills["skills"]])
+        dbdata[-1][1]["personality"] = myersbrigs
+
+    #TODO : make groups of size N, as opposed to just pairings of size 2
+    matches = makePairings(dbdata)
+    groups = groupsFromMatches(matches)
+    groupUIDs = {}
+    #now we must create the group objects in firebase, and put the groupUID into the Member and Class objects.
+    for group in groups:
+        ret = rtdb.post("/Groups", {"name":"New Group", "members":groups[0], "classUID":classUID})
+        rtdb.patch("/Groups/"+ret["name"], {"UID":ret["name"]})
+        groupUIDs[ret["name"]] = True
+
+        for memberUID in list(group.keys()):# update each member with their group ID
+            rtdb.patch("/Members/"+memberUID+"/", {"groupUID":ret["name"]})
+    #at this point, the groups are made, and we are just updating
+    rtdb.patch("/Classes/"+classUID+"/groupUIDs", groupUIDs)
+
+    #and we are clear
+    return "abradacadarba"
+
+    
+
+

@@ -18,7 +18,7 @@ public class Member extends RelationalElement<Student, Class> {
      * For our case, a member is a student which "uses" (read: is a member of) a class
      * */
 
-    public String groupID;
+    public String groupUID;
 
     // ID of other members I have rated to rating
     private HashMap<String, Integer> ratingsOutward;

@@ -66,7 +66,7 @@ public class Group extends DeclarativeElement {
 
     public static void getGroupMembersListAsync(String uid, ValueEventListener valueEventListener) {
         DatabaseReference database = db.get().child(new Group().loc());
-        database.child(uid).addListenerForSingleValueEvent(valueEventListener);
+        database.child(uid).child("members").addListenerForSingleValueEvent(valueEventListener);
     }
 
 

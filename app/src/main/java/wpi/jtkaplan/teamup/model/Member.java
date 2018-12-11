@@ -18,7 +18,7 @@ public class Member extends RelationalElement<Student, Class> {
      * For our case, a member is a student which "uses" (read: is a member of) a class
      * */
 
-    public String groupUID;
+    public String groupUID = "";
 
     // ID of other members I have rated to rating
     private HashMap<String, Integer> ratingsOutward;
@@ -37,6 +37,10 @@ public class Member extends RelationalElement<Student, Class> {
     // TODO : implement
     public Member(Student s, Class c) {
         super(s, c);
+        this.groupUID = null;
+        if (this.groupUID == null) {
+            this.groupUID = "";
+        }
         updateRTDB();
     }
     /*
@@ -49,6 +53,16 @@ public class Member extends RelationalElement<Student, Class> {
             dbr.setValue(this);
         }
     }*/
+
+    public String getGroupUID() {
+        return groupUID;
+    }
+
+    @Exclude
+    public void setGroupUID(String groupUID) {
+        this.groupUID = groupUID;
+        updateRTDB();
+    }
 
     @Override
     final String loc() {

@@ -91,7 +91,7 @@ public class StudentsRecyclerViewFragment
                 } else {
                     // No students
 
-                    txtNoStudents.setText("No students have joined yet");
+                    txtNoStudents.setText("No students have joined yet.\n The code to join is "+ UserPreferences.getSelectedClass().UID + ".");
 
                 }
             }

@@ -1,5 +1,6 @@
 package wpi.jtkaplan.teamup;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,9 @@ public class AddClassFragment extends Fragment {
 
     private String classID;
     private EditText idInput;
+
+    private static final int REQUEST_CODE_ADD_CLASS = 101;
+
 
     @Nullable
     @Override
@@ -37,10 +41,24 @@ public class AddClassFragment extends Fragment {
                 classID = idInput.getText().toString();
                 intent.putExtra("uid", classID);
                 System.out.println("classID from frag " + classID);
-                activity.startActivity(intent);
+                activity.startActivityForResult(intent, REQUEST_CODE_ADD_CLASS);
             }
         });
 
         return v;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (REQUEST_CODE_ADD_CLASS == requestCode) {
+            if (Activity.RESULT_OK == resultCode) {
+                // Here
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ClassesRecyclerViewFragment()).addToBackStack(null).commit();
+
+            } else {
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }

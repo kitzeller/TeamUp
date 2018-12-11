@@ -23,11 +23,13 @@ import java.util.List;
 import wpi.jtkaplan.teamup.model.Class;
 import wpi.jtkaplan.teamup.model.Group;
 import wpi.jtkaplan.teamup.model.Member;
+import wpi.jtkaplan.teamup.model.Student;
 import wpi.jtkaplan.teamup.model.User;
 
 public class ClassGroupsRecyclerViewFragment extends Fragment {
 
     private List<Group> groups;
+    private HashMap<String, ArrayList<String>> groupUsers;
     private RecyclerView rv;
     private ClassGroupsRVAdapter adapter;
     private TextView txtNoGroup;
@@ -53,6 +55,7 @@ public class ClassGroupsRecyclerViewFragment extends Fragment {
 
     private void initializeData() {
         groups = new ArrayList<>();
+        groupUsers = new HashMap<>();
         Class selectedClass = UserPreferences.getSelectedClass();
 
         selectedClass.getGroupsListAsync(new ValueEventListener() {
@@ -66,9 +69,57 @@ public class ClassGroupsRecyclerViewFragment extends Fragment {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 Group g = dataSnapshot.getValue(Group.class);
-                                System.out.println("Group " + g.getName());
-                                groups.add(g);
-                                adapter.notifyDataSetChanged();
+                                if (g != null) {
+                                    System.out.println("Group " + g.getName());
+                                    groups.add(g);
+                                    Group.getGroupMembersListAsync(g.UID, new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            HashMap<String, Boolean> memberMap = (HashMap<String, Boolean>) dataSnapshot.getValue();
+                                            if (memberMap != null) {
+                                                for (String key : memberMap.keySet()) {
+                                                    String[] values = key.split("\\:");
+                                                    String studentUID = values[0];
+                                                    String classUID = values[1];
+                                                    System.out.println("SUID " + studentUID);
+
+                                                    User.getUserFromPref(studentUID, "Students", new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                                            Student studentObj = dataSnapshot.getValue(Student.class);
+                                                            if (studentObj != null) {
+                                                                ArrayList<String> names;
+                                                                if (groupUsers.get(g.UID) != null) {
+                                                                    names = groupUsers.get(g.UID);
+                                                                } else {
+                                                                    names = new ArrayList<>();
+                                                                }
+                                                                names.add(studentObj.getName());
+                                                                groupUsers.put(g.UID, names);
+                                                                System.out.println("name: " + studentObj.getName());
+                                                                adapter.notifyDataSetChanged();
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(DatabaseError databaseError) {
+
+                                                        }
+                                                    });
+                                                }
+                                                adapter.notifyDataSetChanged();
+
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+                                    adapter.notifyDataSetChanged();
+                                }
                             }
 
                             @Override
@@ -84,8 +135,13 @@ public class ClassGroupsRecyclerViewFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
                             // TODO: Call Create Groups
-                            Toast.makeText(getActivity(), "Creating Groups...",
+                            Toast.makeText(getActivity(), "Creating Groups for " + selectedClass.getName() + "...",
                                     Toast.LENGTH_SHORT).show();
+
+                            selectedClass.makeGroupsAsync();
+                            initializeData();
+
+
                         }
                     });
                 }
@@ -99,7 +155,7 @@ public class ClassGroupsRecyclerViewFragment extends Fragment {
     }
 
     private void initializeAdapter() {
-        adapter = new ClassGroupsRVAdapter(groups);
+        adapter = new ClassGroupsRVAdapter(groups, groupUsers);
         adapter.getItemId(groups.size() - 1);
         rv.setAdapter(adapter);
     }

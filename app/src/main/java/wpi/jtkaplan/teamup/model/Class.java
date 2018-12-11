@@ -62,6 +62,14 @@ public class Class extends DeclarativeElement {
     @Exclude
     static String ip = "http://35.230.178.139:8326/";
 
+    class GroupTask extends android.os.AsyncTask {
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            makeGroups();
+            return null;
+        }
+    }
+
     @Exclude
     public void makeGroups() {
         if (this.UID == null) {
@@ -69,7 +77,7 @@ public class Class extends DeclarativeElement {
             return;
         }
         try {
-            HttpURLConnection connection = (HttpURLConnection) new URL("hhtp", "35.230.178.139", 8326, this.UID).openConnection();
+            HttpURLConnection connection = (HttpURLConnection) new URL("http", "35.230.178.139", 8326, this.UID).openConnection();
             connection.connect();
             System.out.println(connection.getContent().toString());
         } catch (MalformedURLException e) {
@@ -77,6 +85,11 @@ public class Class extends DeclarativeElement {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Exclude
+    public void makeGroupsAsync() {
+        (new GroupTask()).execute();
     }
 
 
@@ -191,21 +204,6 @@ public class Class extends DeclarativeElement {
         updateRTDB();
     }
 
-    /**
-     * NOTE : THIS PERFORMS YOUR ValueEventListener ON EACH CLASS THE STUDENT IS TAKING
-     * THIS IS INTENDED TO BE USED WHEN POPULATING
-     */
-    /*
-    public void getSkillsAsync(ValueEventListener valueEventListener) {
-        dbr.child("skills").addListenerForSingleValueEvent(valueEventListener);
-    }
-    */
-    /*public void addSkills(Collection<? extends Skills> skills) {
-        for (Skills s : skills) {
-            this.addSkill(s);
-        }
-
-    }*/
     public void addSkill(String s) {
         this.skills.put(s, true);
         updateRTDB();

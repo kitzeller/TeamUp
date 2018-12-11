@@ -100,6 +100,8 @@ public class SkillsTestActivity extends AppCompatActivity {
 
                                     Toast.makeText(SkillsTestActivity.this, "Submitted Skills Test",
                                             Toast.LENGTH_SHORT).show();
+                                    Intent returnIntent = new Intent();
+                                    setResult(RESULT_OK, returnIntent);
                                     finish();
 
                                 }

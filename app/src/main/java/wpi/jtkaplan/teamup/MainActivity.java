@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 //                    new HomeFragment()).commit();
 
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new ProfileFragment()).commit();
+                    new ProfileFragment()).addToBackStack(null).commit();
         }
     }
 
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            selectedFragment).commit();
+                            selectedFragment).addToBackStack(null).commit();
 
                     return true;
                 }

@@ -179,12 +179,18 @@ def groupsFromMatches(matches):
     return groups
 
 
-@app.route("/", methods=["POST", "GET"])
-def makeGroup(classUID):
-    #classUID = request.arg.get("ClassUID", type=str)
-
+@app.route("/<classUID>", methods=["POST", "GET"])
+def makeGroup(classUID=None):
+    if (not classUID):
+        print("classUID INVALID : " + str(classUID))
+        return "not a valid classUID"
+    
     clss = rtdb.get("/Classes", classUID)
 
+    if(clss == None):
+        print("classUID INVALID : " + str(classUID))
+        return "not a valid classUID : "+str(classUID)
+    
     dbdata = []
 
     #load all of the data for the current class
@@ -206,6 +212,7 @@ def makeGroup(classUID):
 
         for memberUID in list(group.keys()):# update each member with their group ID
             rtdb.patch("/Members/"+memberUID+"/", {"groupUID":ret["name"]})
+            
     #at this point, the groups are made, and we are just updating
     rtdb.patch("/Classes/"+classUID+"/groupUIDs", groupUIDs)
 
@@ -213,5 +220,6 @@ def makeGroup(classUID):
     return "abradacadarba"
 
     
-
+if __name__ == '__main__':
+  app.run(host="0.0.0.0", port=8326)
 

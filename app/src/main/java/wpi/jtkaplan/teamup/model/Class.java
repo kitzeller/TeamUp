@@ -6,6 +6,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -54,6 +58,27 @@ public class Class extends DeclarativeElement {
         this.name = name;
         this.id = "";
     }
+
+    @Exclude
+    static String ip = "http://35.230.178.139:8326/";
+
+    @Exclude
+    public void makeGroups() {
+        if (this.UID == null) {
+            System.out.println("ERROR : TRIED TO MAKE GROUP ON CLASS WITHOUT UID");
+            return;
+        }
+        try {
+            HttpURLConnection connection = (HttpURLConnection) new URL("hhtp", "35.230.178.139", 8326, this.UID).openConnection();
+            connection.connect();
+            System.out.println(connection.getContent().toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
     public String getProfessorUID() {

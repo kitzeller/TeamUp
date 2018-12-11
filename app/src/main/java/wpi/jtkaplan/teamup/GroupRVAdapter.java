@@ -39,8 +39,10 @@ public class GroupRVAdapter extends RecyclerView.Adapter<GroupRVAdapter.MemberVi
         memberViewHolder.memberID = usertoMember.get(userID);
         memberViewHolder.memberName.setText(members.get(i).getName());
         memberViewHolder.memberEmail.setText(members.get(i).getEmail());
-        Picasso.get().load(members.get(i).getPhoto()).transform(new PicassoCircleTransformation())
-                .into(memberViewHolder.memberPhoto);
+        if (members.get(i).getPhoto() != null) {
+            Picasso.get().load(members.get(i).getPhoto()).transform(new PicassoCircleTransformation())
+                    .into(memberViewHolder.memberPhoto);
+        }
     }
 
     @Override

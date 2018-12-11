@@ -34,8 +34,10 @@ public class StudentsRVAdapter<UserType extends User> extends RecyclerView.Adapt
         memberViewHolder.memberEmail.setText(members.get(i).getEmail());
         memberViewHolder.member = members.get(i);
 
-        Picasso.get().load(members.get(i).getPhoto()).transform(new PicassoCircleTransformation())
-                .into(memberViewHolder.memberPhoto);
+        if (members.get(i).getPhoto() != null) {
+            Picasso.get().load(members.get(i).getPhoto()).transform(new PicassoCircleTransformation())
+                    .into(memberViewHolder.memberPhoto);
+        }
     }
 
     @Override

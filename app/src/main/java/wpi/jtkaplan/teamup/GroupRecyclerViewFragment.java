@@ -70,45 +70,50 @@ public class GroupRecyclerViewFragment
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Member m = dataSnapshot.getValue(Member.class);
-                if (m.groupUID != null) {
-                    // TODO: Get group members
-                    Group.getGroupMembersListAsync(m.groupUID, new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            HashMap<String, Boolean> memberMap = (HashMap<String, Boolean>) dataSnapshot.getValue();
-                            if (memberMap != null) {
-                                for (String key : memberMap.keySet()) {
-                                    String[] values = key.split("\\:");
-                                    String studentUID = values[0];
-                                    //String classUID = values[1];
-                                    System.out.println("SUID " + studentUID);
+                if (m != null) {
+                    if (m.groupUID != null) {
+                        if (!m.groupUID.equals("")) {
+                            System.out.println("GroupID: " + m.groupUID);
+                            // TODO: Get group members
+                            Group.getGroupMembersListAsync(m.groupUID, new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    HashMap<String, Boolean> memberMap = (HashMap<String, Boolean>) dataSnapshot.getValue();
+                                    if (memberMap != null) {
+                                        for (String key : memberMap.keySet()) {
+                                            String[] values = key.split("\\:");
+                                            String studentUID = values[0];
+                                            //String classUID = values[1];
+                                            System.out.println("SUID " + studentUID);
 
-                                    User.getUserFromPref(studentUID, "Students", new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                            Student studentObj = dataSnapshot.getValue(Student.class);
-                                            members.add(studentObj);
-                                            usertoMember.put(studentUID,key);
-                                            adapter.notifyDataSetChanged();
+                                            User.getUserFromPref(studentUID, "Students", new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    Student studentObj = dataSnapshot.getValue(Student.class);
+                                                    members.add(studentObj);
+                                                    usertoMember.put(studentUID, key);
+                                                    adapter.notifyDataSetChanged();
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                }
+                                            });
                                         }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-
-                                        }
-                                    });
+                                    }
                                 }
-                            }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+                        } else {
+                            txtNoGroup.setText("Group has not been created.");
                         }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-                } else {
-                    txtNoGroup.setText("Group has not been created.");
+                    }
                 }
             }
             @Override

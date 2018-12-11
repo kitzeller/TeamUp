@@ -80,7 +80,7 @@ public class GroupRecyclerViewFragment
                                 for (String key : memberMap.keySet()) {
                                     String[] values = key.split("\\:");
                                     String studentUID = values[0];
-                                    String classUID = values[1];
+                                    //String classUID = values[1];
                                     System.out.println("SUID " + studentUID);
 
                                     User.getUserFromPref(studentUID, "Students", new ValueEventListener() {

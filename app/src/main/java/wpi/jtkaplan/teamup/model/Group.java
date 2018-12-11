@@ -60,13 +60,13 @@ public class Group extends DeclarativeElement {
     public void getGroupMembersAsync(ValueEventListener valueEventListener) {
         DatabaseReference database = db.get().child(new Group().loc());
         for (String m: this.members.keySet()) {
-            database.child(UID).child(m).addListenerForSingleValueEvent(valueEventListener);
+            database.child(UID).child("members").child(m).addListenerForSingleValueEvent(valueEventListener);
         }
     }
 
     public static void getGroupMembersListAsync(String uid, ValueEventListener valueEventListener) {
         DatabaseReference database = db.get().child(new Group().loc());
-        database.child(uid).addListenerForSingleValueEvent(valueEventListener);
+        database.child(uid).child("members").addListenerForSingleValueEvent(valueEventListener);
     }
 
 
